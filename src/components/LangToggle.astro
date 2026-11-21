@@ -1,0 +1,66 @@
+---
+import { pathFor, t, type Lang, type PageRef } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+  page: PageRef;
+}
+
+const { lang, page } = Astro.props;
+const options = [
+  { code: 'pt', label: 'PT', hreflang: 'pt-BR', title: t('pt').a11y.langSwitch },
+  { code: 'en', label: 'EN', hreflang: 'en', title: t('en').a11y.langSwitch },
+] as const;
+---
+
+<div class="lang" role="group" aria-label={t(lang).a11y.langGroup}>
+  {
+    options.map((o) =>
+      o.code === lang ? (
+        <span class="opt active" aria-current="true" lang={o.hreflang}>
+          {o.label}
+        </span>
+      ) : (
+        <a class="opt" href={pathFor(o.code, page)} hreflang={o.hreflang} lang={o.hreflang} aria-label={o.title} data-lang-link={o.code}>
+          {o.label}
+        </a>
+      ),
+    )
+  }
+</div>
+
+<style>
+  .lang {
+    display: flex;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    font-family: var(--font-mono);
+    font-size: 13px;
+  }
+
+  .opt {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+
+  a.opt:hover {
+    color: var(--text);
+    background: var(--surface-2);
+  }
+
+  a.opt:focus-visible {
+    outline-offset: -2px;
+  }
+
+  .active {
+    background: var(--text);
+    color: var(--bg);
+  }
+</style>

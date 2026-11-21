@@ -1,0 +1,41 @@
+---
+import { site } from '../data/site';
+import { t, type Lang } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const d = t(Astro.props.lang);
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="inner">
+    <span>© {year} {site.name} · {site.domain}</span>
+    <span>{d.footer.builtWith} <span class="kbd" data-shortcut-label>Ctrl K</span> {d.footer.toOpen}</span>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--border-soft);
+  }
+
+  .inner {
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 28px 24px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  .kbd {
+    font-size: 11px;
+  }
+</style>

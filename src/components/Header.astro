@@ -1,0 +1,188 @@
+---
+import LangToggle from './LangToggle.astro';
+import { routes, t, type Lang, type PageRef } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+  page: PageRef;
+}
+
+const { lang, page } = Astro.props;
+const d = t(lang);
+const home = routes.home(lang);
+const links = (['projects', 'experience', 'stack', 'contact'] as const).map((key) => ({
+  href: page.kind === 'home' ? `#${d.ids[key]}` : routes.section(lang, key),
+  label: d.nav[key],
+}));
+---
+
+<header class="site-header">
+  <nav class="bar" aria-label={d.a11y.mainNav}>
+    {
+      page.kind === 'project' ? (
+        <a class="brand" href={routes.section(lang, 'projects')}>
+          ~/viniciusps<span class="dim">/{d.nav.projectsPath}/</span>
+          <span class="accent">{page.slug}</span>
+        </a>
+      ) : (
+        <a class="brand" href={page.kind === 'home' ? '#conteudo' : home}>
+          ~/viniciusps
+          <span class="cursor" aria-hidden="true" />
+        </a>
+      )
+    }
+
+    {
+      page.kind !== 'project' && (
+        <ul class="links" role="list">
+          {links.map((l) => (
+            <li>
+              <a href={l.href}>{l.label}</a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+
+    <div class="actions">
+      <LangToggle lang={lang} page={page} />
+      {
+        page.kind === 'project' ? (
+          <a class="back" href={routes.section(lang, 'projects')}>
+            {d.nav.back}
+          </a>
+        ) : (
+          <button type="button" class="term-btn" data-terminal-open aria-haspopup="dialog">
+            <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="4 17 10 11 4 5" />
+              <line x1="12" y1="19" x2="20" y2="19" />
+            </svg>
+            {d.nav.terminal}
+            <span class="kbd" data-shortcut-label>Ctrl K</span>
+          </button>
+        )
+      }
+    </div>
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    background: rgba(10, 10, 10, 0.92);
+    border-bottom: 1px solid var(--border-soft);
+    z-index: 20;
+  }
+
+  /* No mobile o header quebra em várias linhas; fixo só a partir de 720px. */
+  @media (min-width: 720px) {
+    .site-header {
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(8px);
+    }
+  }
+
+  .bar {
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 14px 24px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 16px;
+    font-family: var(--font-mono);
+    font-size: 14px;
+  }
+
+  @media (max-width: 480px) {
+    .bar {
+      padding: 10px 16px;
+    }
+  }
+
+  .brand {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+
+  .brand .dim {
+    color: var(--text-dim);
+  }
+
+  .brand .dim + .accent {
+    margin-left: -6px;
+  }
+
+  .cursor {
+    display: inline-block;
+    width: 8px;
+    height: 16px;
+    background: var(--accent);
+  }
+
+  .links {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 24px;
+  }
+
+  .links a,
+  .back {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+
+  .links a:hover,
+  .back:hover {
+    color: var(--text);
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .term-btn {
+    min-height: 44px;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    cursor: pointer;
+  }
+
+  .term-btn:hover {
+    border-color: var(--border-strong);
+    background: var(--surface);
+  }
+
+  @media (max-width: 719px) {
+    .links {
+      order: 3;
+      width: 100%;
+      gap: 0 20px;
+    }
+  }
+</style>

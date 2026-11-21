@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Home — viniciusps.tech</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap">
+<style>
+body{margin:0;background:#0A0A0A}
+a{color:#EDEDED}a:hover{color:#FFFFFF}
+</style>
+</helmet>
+<div style="background: #0A0A0A; color: #EDEDED; font-family: Inter, system-ui, sans-serif; min-height: 100vh">
+
+<header style="position: sticky; top: 0; z-index: 5; background: rgba(10,10,10,0.92); border-bottom: 1px solid #1F1F1F">
+<nav aria-label="Principal" style="max-width: 1120px; margin: 0 auto; padding: 16px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<a href="#topo" style="font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 500; text-decoration: none; display: flex; align-items: center; gap: 6px; color: #EDEDED">~/viniciusps<span style="display: inline-block; width: 8px; height: 16px; background: {{accent}}"></span></a>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 24px; font-family: 'JetBrains Mono', monospace; font-size: 14px">
+<a href="#projetos" style="text-decoration: none; color: #A1A1A1">projetos</a>
+<a href="#experiencia" style="text-decoration: none; color: #A1A1A1">experiência</a>
+<a href="#stack" style="text-decoration: none; color: #A1A1A1">stack</a>
+<a href="#contato" style="text-decoration: none; color: #A1A1A1">contato</a>
+</div>
+<div style="display: flex; align-items: center; gap: 12px">
+<div role="group" aria-label="Idioma" style="display: flex; border: 1px solid #262626; border-radius: 6px; overflow: hidden; font-family: 'JetBrains Mono', monospace; font-size: 13px">
+<button type="button" onClick="{{setPt}}" style="min-height: 36px; padding: 0 12px; border: none; cursor: pointer; font: inherit; background: {{ptBg}}; color: {{ptColor}}">PT</button>
+<button type="button" onClick="{{setEn}}" style="min-height: 36px; padding: 0 12px; border: none; cursor: pointer; font: inherit; background: {{enBg}}; color: {{enColor}}">EN</button>
+</div>
+<a href="Terminal.dc.html" style="min-height: 36px; padding: 0 12px; display: flex; align-items: center; gap: 8px; border: 1px solid #262626; border-radius: 6px; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #EDEDED">
+<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+terminal<span style="padding: 2px 6px; border: 1px solid #333333; border-radius: 4px; font-size: 11px; color: #A1A1A1">Ctrl K</span></a>
+</div>
+</nav>
+</header>
+
+<main id="topo" style="max-width: 1120px; margin: 0 auto; padding: 0 24px">
+
+<section aria-labelledby="hero-title" style="padding: 96px 0 112px; display: flex; flex-wrap: wrap; align-items: center; gap: 56px">
+<div style="flex: 1 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 24px">
+<p style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #8A8A8A"><span style="color: {{accent}}">$</span> whoami</p>
+<h1 id="hero-title" style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: clamp(40px, 6vw, 68px); line-height: 1.05; font-weight: 700; letter-spacing: -0.02em">Vinicius Santos</h1>
+<p style="margin: 0; font-size: 20px; line-height: 1.55; color: #A1A1A1; max-width: 560px">Desenvolvedor backend. Construo APIs em Java/Spring Boot e C#/.NET, do código ao deploy em produção.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #A1A1A1">
+<span style="padding: 6px 10px; border: 1px solid #262626; border-radius: 6px">São Paulo, BR</span>
+<span style="padding: 6px 10px; border: 1px solid #262626; border-radius: 6px">Backend @ XP Inc.</span>
+<span style="padding: 6px 10px; border: 1px solid #262626; border-radius: 6px">ADS @ São Judas</span>
+</div>
+<p style="margin: 0; display: flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #A1A1A1"><span style="width: 8px; height: 8px; border-radius: 50%; background: {{accent}}"></span>aberto a freelas e oportunidades</p>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding-top: 8px">
+<a href="#projetos" style="min-height: 44px; padding: 0 20px; display: flex; align-items: center; border-radius: 6px; background: {{accent}}; color: #0A0A0A; text-decoration: none; font-weight: 600; font-size: 15px">Ver projetos</a>
+<a href="#cv" style="min-height: 44px; padding: 0 20px; display: flex; align-items: center; gap: 8px; border: 1px solid #333333; border-radius: 6px; color: #EDEDED; text-decoration: none; font-weight: 500; font-size: 15px">
+<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+Baixar CV</a>
+<a href="#contato" style="min-height: 44px; padding: 0 8px; display: flex; align-items: center; color: #A1A1A1; font-size: 15px">Falar comigo →</a>
+</div>
+</div>
+
+<div aria-hidden="true" style="flex: 1 1 400px; min-width: 0; border: 1px solid #262626; border-radius: 10px; background: #111111; overflow: hidden">
+<div style="display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-bottom: 1px solid #1F1F1F">
+<span style="width: 10px; height: 10px; border-radius: 50%; background: #333333"></span>
+<span style="width: 10px; height: 10px; border-radius: 50%; background: #333333"></span>
+<span style="width: 10px; height: 10px; border-radius: 50%; background: #333333"></span>
+<span style="margin-left: 8px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #8A8A8A">zsh — viniciusps</span>
+</div>
+<div style="padding: 20px 20px 24px; font-family: 'JetBrains Mono', monospace; font-size: 14px; line-height: 1.8">
+<div><span style="color: {{accent}}">$</span> cat sobre.txt</div>
+<div style="color: #A1A1A1">backend developer · são paulo</div>
+<div style="height: 12px"></div>
+<div><span style="color: {{accent}}">$</span> cat stack.txt</div>
+<div style="color: #A1A1A1">java · spring boot · c# · .net · python</div>
+<div style="height: 12px"></div>
+<div><span style="color: {{accent}}">$</span> cat agora.txt</div>
+<div style="color: #A1A1A1">apis de renda variável @ xp inc.</div>
+<div style="color: #A1A1A1">ads @ são judas (até 2028)</div>
+<div style="height: 12px"></div>
+<div><span style="color: {{accent}}">$</span> <span style="display: inline-block; width: 9px; height: 17px; vertical-align: -3px; background: #EDEDED"></span></div>
+</div>
+</div>
+</section>
+
+<section id="projetos" aria-labelledby="proj-title" style="padding: 48px 0 32px; border-top: 1px solid #1F1F1F; display: flex; flex-direction: column; gap: 32px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<p style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #8A8A8A"><span style="color: {{accent}}">$</span> ls projetos/ --destaque</p>
+<h2 id="proj-title" style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 32px; font-weight: 700">Projetos em destaque</h2>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 20px">
+
+<article style="flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; border: 1px solid #262626; border-radius: 10px; background: #111111; overflow: hidden">
+<div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid #1F1F1F; font-family: 'JetBrains Mono', monospace; font-size: 12px">
+<span style="color: #A1A1A1">fluxen/</span>
+<span style="display: flex; align-items: center; gap: 6px; color: {{accent}}"><span style="width: 6px; height: 6px; border-radius: 50%; background: {{accent}}"></span>em produção</span>
+</div>
+<div style="height: 180px; background: #161616; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #8A8A8A; border-bottom: 1px solid #1F1F1F">[print do Fluxen]</div>
+<div style="padding: 20px; display: flex; flex-direction: column; gap: 14px; flex-grow: 1">
+<h3 style="margin: 0; font-size: 20px; font-weight: 600">Fluxen</h3>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; color: #A1A1A1">SaaS de finanças pessoais (freemium). Desenvolvi sozinho backend, frontend e infraestrutura, da autenticação e cobrança recorrente ao deploy em VPS própria.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 6px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #A1A1A1">
+<span style="padding: 4px 8px; background: #1A1A1A; border-radius: 4px">Spring Boot</span>
+<span style="padding: 4px 8px; background: #1A1A1A; border-radius: 4px">PostgreSQL</span>
+<span style="padding: 4px 8px; background: #1A1A1A; border-radius: 4px">React</span>
+<span style="padding: 4px 8px; background: #1A1A1A; border-radius: 4px">TypeScript</span>
+<span style="padding: 4px 8px; background: #1A1A1A; border-radius: 4px">Stripe</span>
+<span style="padding: 4px 8px; background: #1A1A1A; border-radius: 4px">Docker</span>
+</div>
+<div style="margin-top: auto; padding-top: 8px; display: flex; flex-wrap: wrap; gap: 20px; font-family: 'JetBrains Mono', monospace; font-size: 13px">
+<a href="Case-Fluxen.dc.html" style="min-height: 44px; display: flex; align-items: center; color: {{accent}}; text-decoration: none">ler case study →</a>
+<a href="https://fluxen.net.br" style="min-height: 44px; display: flex; align-items: center; color: #A1A1A1">fluxen.net.br ↗</a>
+</div>
+</div>
+</article>
+
+<article style="flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; border: 1px solid #262626; border-radius: 10px; background: #111111; overflow: hidden">
+<div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid #1F1F1F; font-family: 'JetBrains Mono', monospace; font-size: 12px">
+<span style="color: #A1A1A1">ritmo/</span>
+<span style="color: #8A8A8A">uso pessoal</span>
+</div>
+<div style="height: 180px; background: #161616; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #8A8A8A; border-bottom: 1px solid #1F1F1F">[print do Ritmo, com dados de exemplo]</div>
+<div style="padding: 20px; display: flex; flex-direction: column; gap: 14px; flex-grow: 1">
+<h3 style="margin: 0; font-size: 20px; font-weight: 600">Ritmo</h3>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; color: #A1A1A1">App que criei para uso próprio: acompanha emagrecimento, dieta e treinos. Nasceu de um problema real do meu dia a dia.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 6px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #A1A1A1">
+<span style="padding: 4px 8px; background: #1A1A1A; border-radius: 4px">[STACK]</span>
+</div>
+<div style="margin-top: auto; padding-top: 8px; display: flex; flex-wrap: wrap; gap: 20px; font-family: 'JetBrains Mono', monospace; font-size: 13px">
+<a href="#projetos" style="min-height: 44px; display: flex; align-items: center; color: {{accent}}; text-decoration: none">ler case study →</a>
+</div>
+</div>
+</article>
+
+<article style="flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; border: 1px solid #262626; border-radius: 10px; background: #111111; overflow: hidden">
+<div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid #1F1F1F; font-family: 'JetBrains Mono', monospace; font-size: 12px">
+<span style="color: #A1A1A1">telegram-bot/</span>
+<span style="color: #8A8A8A">automação</span>
+</div>
+<div style="height: 180px; background: #161616; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #8A8A8A; border-bottom: 1px solid #1F1F1F">[print de uma conversa com o bot]</div>
+<div style="padding: 20px; display: flex; flex-direction: column; gap: 14px; flex-grow: 1">
+<h3 style="margin: 0; font-size: 20px; font-weight: 600">Bot do Telegram</h3>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; color: #A1A1A1">Bot pessoal que centraliza meus scripts de automação em Python: [lembretes de contas, monitor de preços, …].</p>
+<div style="display: flex; flex-wrap: wrap; gap: 6px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #A1A1A1">
+<span style="padding: 4px 8px; background: #1A1A1A; border-radius: 4px">Python</span>
+<span style="padding: 4px 8px; background: #1A1A1A; border-radius: 4px">Telegram Bot API</span>
+<span style="padding: 4px 8px; background: #1A1A1A; border-radius: 4px">[OUTROS]</span>
+</div>
+<div style="margin-top: auto; padding-top: 8px; display: flex; flex-wrap: wrap; gap: 20px; font-family: 'JetBrains Mono', monospace; font-size: 13px">
+<a href="#projetos" style="min-height: 44px; display: flex; align-items: center; color: {{accent}}; text-decoration: none">ler case study →</a>
+</div>
+</div>
+</article>
+
+</div>
+</section>
+
+<section aria-labelledby="outros-title" style="padding: 32px 0 80px; display: flex; flex-direction: column; gap: 16px">
+<p id="outros-title" style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #8A8A8A"><span style="color: {{accent}}">$</span> ls -l projetos/outros/</p>
+<div style="border: 1px solid #262626; border-radius: 10px; overflow: hidden; font-family: 'JetBrains Mono', monospace; font-size: 14px">
+<a href="#projetos" style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 24px; padding: 18px 20px; text-decoration: none; color: #EDEDED; border-bottom: 1px solid #1F1F1F">
+<span style="flex: 0 0 140px; color: {{accent}}">scenestack/</span>
+<span style="flex: 1 1 320px; min-width: 0; font-family: Inter, sans-serif; font-size: 15px; color: #A1A1A1">Busca de filmes e séries com integração à OMDb API.</span>
+<span style="color: #8A8A8A; font-size: 13px">React · Spring Boot</span>
+<span style="color: #8A8A8A">↗</span>
+</a>
+<a href="#projetos" style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 24px; padding: 18px 20px; text-decoration: none; color: #EDEDED">
+<span style="flex: 0 0 140px; color: {{accent}}">ecobazar/</span>
+<span style="flex: 1 1 320px; min-width: 0; font-family: Inter, sans-serif; font-size: 15px; color: #A1A1A1">Marketplace desktop, projeto acadêmico com documentação ABNT.</span>
+<span style="color: #8A8A8A; font-size: 13px">Java · Swing</span>
+<span style="color: #8A8A8A">↗</span>
+</a>
+</div>
+</section>
+
+<section id="experiencia" aria-labelledby="exp-title" style="padding: 48px 0 80px; border-top: 1px solid #1F1F1F; display: flex; flex-direction: column; gap: 32px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<p style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #8A8A8A"><span style="color: {{accent}}">$</span> cat experiencia.log</p>
+<h2 id="exp-title" style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 32px; font-weight: 700">Experiência</h2>
+</div>
+<div style="display: flex; flex-direction: column">
+<div style="display: flex; flex-wrap: wrap; gap: 8px 40px; padding: 28px 0; border-bottom: 1px solid #1F1F1F">
+<p style="margin: 0; flex: 0 0 180px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #8A8A8A; padding-top: 4px">ago 2026 — atual</p>
+<div style="flex: 1 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+<h3 style="margin: 0; font-size: 18px; font-weight: 600">XP Inc. <span style="font-weight: 400; color: #A1A1A1">· Jovem Aprendiz, desenvolvimento backend</span></h3>
+<ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 8px; font-size: 15px; line-height: 1.6; color: #A1A1A1">
+<li>Mantenho APIs em C#/.NET e MongoDB da área de renda variável.</li>
+<li>Fiz upgrade de aplicações para .NET 10 e atualizei os drivers do MongoDB.</li>
+<li>Participei da migração de gateways em produção.</li>
+<li>Acompanho as aplicações com Dynatrace e Grafana.</li>
+</ul>
+</div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px 40px; padding: 28px 0; border-bottom: 1px solid #1F1F1F">
+<p style="margin: 0; flex: 0 0 180px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #8A8A8A; padding-top: 4px">[início] — jun 2028</p>
+<div style="flex: 1 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+<h3 style="margin: 0; font-size: 18px; font-weight: 600">Universidade São Judas Tadeu <span style="font-weight: 400; color: #A1A1A1">· Análise e Desenvolvimento de Sistemas</span></h3>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; color: #A1A1A1">Com base anterior em Ciência da Computação.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section id="stack" aria-labelledby="stack-title" style="padding: 48px 0 80px; border-top: 1px solid #1F1F1F; display: flex; flex-direction: column; gap: 32px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<p style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #8A8A8A"><span style="color: {{accent}}">$</span> stack --list</p>
+<h2 id="stack-title" style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 32px; font-weight: 700">Stack</h2>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 20px; font-family: 'JetBrains Mono', monospace">
+<div style="flex: 1 1 240px; min-width: 0; padding: 20px; border: 1px solid #262626; border-radius: 10px; display: flex; flex-direction: column; gap: 12px">
+<p style="margin: 0; font-size: 13px; color: {{accent}}">backend</p>
+<p style="margin: 0; font-size: 15px; line-height: 1.9; color: #EDEDED">Java<br>Spring Boot<br>C# / .NET<br>Python</p>
+</div>
+<div style="flex: 1 1 240px; min-width: 0; padding: 20px; border: 1px solid #262626; border-radius: 10px; display: flex; flex-direction: column; gap: 12px">
+<p style="margin: 0; font-size: 13px; color: {{accent}}">dados</p>
+<p style="margin: 0; font-size: 15px; line-height: 1.9; color: #EDEDED">PostgreSQL<br>MySQL<br>MongoDB</p>
+</div>
+<div style="flex: 1 1 240px; min-width: 0; padding: 20px; border: 1px solid #262626; border-radius: 10px; display: flex; flex-direction: column; gap: 12px">
+<p style="margin: 0; font-size: 13px; color: {{accent}}">frontend</p>
+<p style="margin: 0; font-size: 15px; line-height: 1.9; color: #EDEDED">React<br>TypeScript</p>
+</div>
+<div style="flex: 1 1 240px; min-width: 0; padding: 20px; border: 1px solid #262626; border-radius: 10px; display: flex; flex-direction: column; gap: 12px">
+<p style="margin: 0; font-size: 13px; color: {{accent}}">infra &amp; observabilidade</p>
+<p style="margin: 0; font-size: 15px; line-height: 1.9; color: #EDEDED">Docker · Coolify<br>nginx · Traefik<br>Dynatrace<br>Grafana</p>
+</div>
+</div>
+</section>
+
+<section aria-labelledby="gh-title" style="padding: 48px 0 80px; border-top: 1px solid #1F1F1F; display: flex; flex-direction: column; gap: 32px">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<p style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #8A8A8A"><span style="color: {{accent}}">$</span> gh api users/ViniciuPSantos</p>
+<h2 id="gh-title" style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 32px; font-weight: 700">Atividade no GitHub</h2>
+</div>
+<a href="https://github.com/ViniciuPSantos" style="min-height: 44px; display: flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #A1A1A1"><span style="width: 6px; height: 6px; border-radius: 50%; background: {{accent}}"></span>ao vivo · @ViniciuPSantos ↗</a>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 20px">
+<div style="flex: 1 1 200px; min-width: 0; padding: 20px; border: 1px solid #262626; border-radius: 10px; display: flex; flex-direction: column; gap: 8px">
+<p style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 28px; font-weight: 700">—</p>
+<p style="margin: 0; font-size: 13px; color: #8A8A8A">repositórios públicos</p>
+</div>
+<div style="flex: 1 1 200px; min-width: 0; padding: 20px; border: 1px solid #262626; border-radius: 10px; display: flex; flex-direction: column; gap: 8px">
+<p style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 28px; font-weight: 700">—</p>
+<p style="margin: 0; font-size: 13px; color: #8A8A8A">contribuições no último ano</p>
+</div>
+<div style="flex: 2 1 420px; min-width: 0; padding: 20px; border: 1px solid #262626; border-radius: 10px; display: flex; flex-direction: column; gap: 14px">
+<p style="margin: 0; font-size: 13px; color: #8A8A8A">linguagens mais usadas</p>
+<div aria-hidden="true" style="display: flex; gap: 4px; height: 8px">
+<span style="flex: 5; background: #2A2A2A; border-radius: 4px"></span>
+<span style="flex: 3; background: #222222; border-radius: 4px"></span>
+<span style="flex: 2; background: #1C1C1C; border-radius: 4px"></span>
+</div>
+<p style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #8A8A8A">[preenchido pela API do GitHub no build]</p>
+</div>
+</div>
+<div style="border: 1px solid #262626; border-radius: 10px; overflow: hidden">
+<p style="margin: 0; padding: 14px 20px; border-bottom: 1px solid #1F1F1F; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #8A8A8A">git log --all --oneline -3</p>
+<div style="display: flex; flex-direction: column; font-family: 'JetBrains Mono', monospace; font-size: 13px">
+<div style="display: flex; flex-wrap: wrap; gap: 8px 20px; padding: 14px 20px; border-bottom: 1px solid #1F1F1F; color: #8A8A8A"><span style="color: {{accent}}">[hash]</span><span style="flex: 1 1 240px">[repo] · [mensagem do commit]</span><span>[há X dias]</span></div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px 20px; padding: 14px 20px; border-bottom: 1px solid #1F1F1F; color: #8A8A8A"><span style="color: {{accent}}">[hash]</span><span style="flex: 1 1 240px">[repo] · [mensagem do commit]</span><span>[há X dias]</span></div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px 20px; padding: 14px 20px; color: #8A8A8A"><span style="color: {{accent}}">[hash]</span><span style="flex: 1 1 240px">[repo] · [mensagem do commit]</span><span>[há X dias]</span></div>
+</div>
+</div>
+</section>
+
+<section id="contato" aria-labelledby="contato-title" style="padding: 48px 0 96px; border-top: 1px solid #1F1F1F; display: flex; flex-wrap: wrap; gap: 48px">
+<div style="flex: 1 1 360px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+<p style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #8A8A8A"><span style="color: {{accent}}">$</span> ./contato.sh</p>
+<h2 id="contato-title" style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 32px; font-weight: 700">Vamos conversar</h2>
+<p style="margin: 0; font-size: 16px; line-height: 1.6; color: #A1A1A1">Vaga, projeto freelance ou uma conversa sobre backend. Respondo em até [PRAZO].</p>
+<div id="cv" style="display: flex; flex-direction: column; gap: 4px; font-family: 'JetBrains Mono', monospace; font-size: 14px">
+<a href="mailto:[SEU EMAIL]" style="min-height: 44px; display: flex; align-items: center; gap: 12px; color: #EDEDED; text-decoration: none"><span style="width: 80px; color: #8A8A8A">email</span>[SEU EMAIL]</a>
+<a href="https://github.com/ViniciuPSantos" style="min-height: 44px; display: flex; align-items: center; gap: 12px; color: #EDEDED; text-decoration: none"><span style="width: 80px; color: #8A8A8A">github</span>ViniciuPSantos ↗</a>
+<a href="#contato" style="min-height: 44px; display: flex; align-items: center; gap: 12px; color: #EDEDED; text-decoration: none"><span style="width: 80px; color: #8A8A8A">linkedin</span>[LINKEDIN] ↗</a>
+<a href="#cv" style="min-height: 44px; display: flex; align-items: center; gap: 12px; color: #EDEDED; text-decoration: none"><span style="width: 80px; color: #8A8A8A">cv</span>baixar PT · EN</a>
+</div>
+</div>
+<form style="flex: 1 1 420px; min-width: 0; padding: 28px; border: 1px solid #262626; border-radius: 10px; background: #111111; display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<label for="f-nome" style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #A1A1A1">nome</label>
+<input id="f-nome" type="text" placeholder="Seu nome" style="min-height: 44px; padding: 0 14px; border: 1px solid #333333; border-radius: 6px; background: #0A0A0A; color: #EDEDED; font: inherit; font-size: 15px">
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<label for="f-email" style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #A1A1A1">email</label>
+<input id="f-email" type="email" placeholder="voce@empresa.com" style="min-height: 44px; padding: 0 14px; border: 1px solid #333333; border-radius: 6px; background: #0A0A0A; color: #EDEDED; font: inherit; font-size: 15px">
+</div>
+<fieldset style="margin: 0; padding: 0; border: none; display: flex; flex-direction: column; gap: 8px">
+<legend style="padding: 0; margin-bottom: 8px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #A1A1A1">assunto</legend>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{subjects}}" as="s" hint-placeholder-count="3">
+<button type="button" onClick="{{s.pick}}" aria-pressed="{{s.pressed}}" style="min-height: 40px; padding: 0 16px; border-radius: 6px; cursor: pointer; font-family: 'JetBrains Mono', monospace; font-size: 13px; border: 1px solid {{s.border}}; background: {{s.bg}}; color: {{s.color}}">{{s.label}}</button>
+</sc-for>
+</div>
+</fieldset>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<label for="f-msg" style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #A1A1A1">mensagem</label>
+<textarea id="f-msg" rows="5" placeholder="Conte um pouco sobre a vaga ou o projeto" style="padding: 12px 14px; border: 1px solid #333333; border-radius: 6px; background: #0A0A0A; color: #EDEDED; font: inherit; font-size: 15px; resize: vertical"></textarea>
+</div>
+<button type="button" style="min-height: 48px; border: none; border-radius: 6px; cursor: pointer; background: {{accent}}; color: #0A0A0A; font-family: Inter, sans-serif; font-size: 15px; font-weight: 600">Enviar mensagem</button>
+</form>
+</section>
+
+</main>
+
+<footer style="border-top: 1px solid #1F1F1F">
+<div style="max-width: 1120px; margin: 0 auto; padding: 28px 24px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #8A8A8A">
+<span>© 2026 Vinicius Santos · viniciusps.tech</span>
+<span>feito com Astro · aperte Ctrl K para abrir o terminal</span>
+</div>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#8804e5&quot;,&quot;options&quot;:[&quot;#67E8F9&quot;,&quot;#A3E635&quot;,&quot;#FBBF24&quot;,&quot;#F9A8D4&quot;]},&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:4200}}">
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { lang: 'pt', subject: 'vaga' };
+  }
+  renderVals() {
+    const accent = this.props.accent ?? '#67E8F9';
+    const lang = this.state.lang;
+    const subj = this.state.subject;
+    const subjects = [
+      { id: 'vaga', label: 'vaga' },
+      { id: 'freela', label: 'freela' },
+      { id: 'outro', label: 'outro' }
+    ].map((s) => {
+      const on = s.id === subj;
+      return {
+        ...s,
+        pressed: on ? 'true' : 'false',
+        bg: on ? accent : 'transparent',
+        color: on ? '#0A0A0A' : '#A1A1A1',
+        border: on ? accent : '#333333',
+        pick: () => this.setState({ subject: s.id })
+      };
+    });
+    return {
+      accent,
+      subjects,
+      ptBg: lang === 'pt' ? '#EDEDED' : 'transparent',
+      ptColor: lang === 'pt' ? '#0A0A0A' : '#A1A1A1',
+      enBg: lang === 'en' ? '#EDEDED' : 'transparent',
+      enColor: lang === 'en' ? '#0A0A0A' : '#A1A1A1',
+      setPt: () => this.setState({ lang: 'pt' }),
+      setEn: () => this.setState({ lang: 'en' })
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -77,7 +77,7 @@ export const en: Dict = {
         ],
       },
       {
-        period: 'until Jun 2028',
+        period: 'Feb 2026 — Jun 2028',
         org: 'São Judas Tadeu University',
         role: 'Systems Analysis and Development',
         text: 'Previously studied Computer Science.',

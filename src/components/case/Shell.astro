@@ -1,0 +1,48 @@
+---
+/** Bloco de terminal com comandos e saídas. */
+type Line = { cmd: string } | { out: string; comment?: string };
+
+interface Props {
+  lines: Line[];
+}
+
+const { lines } = Astro.props;
+---
+
+<pre class="shell"><code>{
+  lines.map((l) =>
+    'cmd' in l ? (
+      <span class="line"><span class="accent" aria-hidden="true">$ </span>{l.cmd}</span>
+    ) : (
+      <span class="line">{l.out}{l.comment && <span class="comment"> {l.comment}</span>}</span>
+    ),
+  )
+}</code></pre>
+
+<style>
+  .shell {
+    margin: 0;
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.9;
+    color: var(--text-muted);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
+  code {
+    font: inherit;
+  }
+
+  .line {
+    display: block;
+  }
+
+  .comment {
+    color: var(--text-dim);
+  }
+</style>

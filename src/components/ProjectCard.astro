@@ -1,0 +1,186 @@
+---
+import { Image } from 'astro:assets';
+import type { Project } from '../lib/projects';
+import { routes, t, type Lang } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+  project: Project;
+}
+
+const { lang, project } = Astro.props;
+const p = project.data;
+const d = t(lang);
+const host = p.links.site ? new URL(p.links.site).host.replace(/^www\./, '') : undefined;
+const titleId = `card-${p.slug}`;
+---
+
+<article class="card" aria-labelledby={titleId}>
+  <div class="head">
+    <span class="path">{p.slug}/</span>
+    <span class:list={['status', { live: p.status === 'producao' }]}>
+      {p.status === 'producao' && <span class="dot" aria-hidden="true" />}
+      {d.projects.status[p.status]}
+    </span>
+  </div>
+  {
+    p.cover ? (
+      <Image
+        class="cover"
+        src={p.cover}
+        alt={p.coverAlt ?? ''}
+        widths={[400, 720]}
+        sizes="(min-width: 1120px) 360px, (min-width: 720px) 50vw, 100vw"
+      />
+    ) : (
+      <div class="cover placeholder-media" aria-hidden="true">
+        {p.coverPlaceholder ?? `[${p.title}]`}
+      </div>
+    )
+  }
+  <div class="body">
+    <h3 id={titleId}>{p.title}</h3>
+    <p class="summary">{p.cardSummary ?? p.summary}</p>
+    <ul class="chips" role="list" aria-label="Stack">
+      {(p.cardStack ?? p.stack).map((s) => <li>{s}</li>)}
+    </ul>
+    <div class="links">
+      {
+        p.hasCase && (
+          <a class="case" href={routes.project(lang, p.slug)}>
+            {d.projects.readCase}
+            <span class="sr-only">: {p.title}</span>
+          </a>
+        )
+      }
+      {
+        host && (
+          <a class="ext" href={p.links.site} target="_blank" rel="noopener">
+            {host} ↗<span class="sr-only"> {d.a11y.newTab}</span>
+          </a>
+        )
+      }
+      {
+        !p.hasCase && p.links.repo && (
+          <a class="ext" href={p.links.repo} target="_blank" rel="noopener">
+            github ↗<span class="sr-only"> {d.a11y.newTab}</span>
+          </a>
+        )
+      }
+    </div>
+  </div>
+</article>
+
+<style>
+  .card {
+    flex: 1 1 320px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    overflow: hidden;
+  }
+
+  .head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-soft);
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+
+  .path {
+    color: var(--text-muted);
+  }
+
+  .status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-dim);
+  }
+
+  .status.live {
+    color: var(--accent-text);
+  }
+
+  .cover {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    object-position: center top;
+    border-bottom: 1px solid var(--border-soft);
+  }
+
+  .body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    flex-grow: 1;
+  }
+
+  h3 {
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .summary {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+
+  .chips {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .chips li {
+    padding: 4px 8px;
+    background: var(--chip);
+    border-radius: 4px;
+  }
+
+  .links {
+    margin-top: auto;
+    padding-top: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 20px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+  }
+
+  .links a {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .case {
+    color: var(--accent-text);
+    text-decoration: none;
+  }
+
+  .case:hover {
+    color: #c9a3ff;
+    text-decoration: underline;
+  }
+
+  .ext {
+    color: var(--text-muted);
+  }
+</style>

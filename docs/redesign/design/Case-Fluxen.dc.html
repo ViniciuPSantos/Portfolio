@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Case study — Fluxen</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap">
+<style>
+body{margin:0;background:#0A0A0A}
+a{color:#EDEDED}a:hover{color:#FFFFFF}
+</style>
+</helmet>
+<div style="background: #0A0A0A; color: #EDEDED; font-family: Inter, system-ui, sans-serif; min-height: 100vh">
+
+<header style="position: sticky; top: 0; z-index: 5; background: rgba(10,10,10,0.92); border-bottom: 1px solid #1F1F1F">
+<nav aria-label="Principal" style="max-width: 1120px; margin: 0 auto; padding: 16px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; font-family: 'JetBrains Mono', monospace; font-size: 14px">
+<a href="Main.dc.html" style="min-height: 44px; display: flex; align-items: center; gap: 6px; text-decoration: none; color: #EDEDED">~/viniciusps<span style="color: #8A8A8A">/projetos/</span><span style="color: {{accent}}">fluxen</span></a>
+<a href="Main.dc.html" style="min-height: 44px; display: flex; align-items: center; color: #A1A1A1; text-decoration: none">← voltar</a>
+</nav>
+</header>
+
+<main style="max-width: 1120px; margin: 0 auto; padding: 0 24px">
+
+<section aria-labelledby="case-title" style="padding: 80px 0 48px; display: flex; flex-direction: column; gap: 24px">
+<p style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #8A8A8A"><span style="color: {{accent}}">$</span> cat projetos/fluxen/README.md</p>
+<h1 id="case-title" style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: clamp(40px, 6vw, 64px); line-height: 1.05; font-weight: 700; letter-spacing: -0.02em">Fluxen</h1>
+<p style="margin: 0; max-width: 720px; font-size: 20px; line-height: 1.55; color: #A1A1A1">SaaS de finanças pessoais com plano gratuito e premium. Construído e operado por mim, do banco de dados ao servidor.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 12px; padding-top: 8px">
+<a href="https://fluxen.net.br" style="min-height: 44px; padding: 0 20px; display: flex; align-items: center; border-radius: 6px; background: {{accent}}; color: #0A0A0A; text-decoration: none; font-weight: 600; font-size: 15px">Abrir fluxen.net.br ↗</a>
+</div>
+</section>
+
+<section aria-label="Resumo" style="display: flex; flex-wrap: wrap; border: 1px solid #262626; border-radius: 10px; overflow: hidden">
+<div style="flex: 1 1 240px; min-width: 0; padding: 20px; border-right: 1px solid #1F1F1F; display: flex; flex-direction: column; gap: 8px">
+<p style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #8A8A8A">papel</p>
+<p style="margin: 0; font-size: 15px; line-height: 1.5">Desenvolvimento solo: backend, frontend e infra</p>
+</div>
+<div style="flex: 1 1 240px; min-width: 0; padding: 20px; border-right: 1px solid #1F1F1F; display: flex; flex-direction: column; gap: 8px">
+<p style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #8A8A8A">período</p>
+<p style="margin: 0; font-size: 15px; line-height: 1.5">[PERÍODO]</p>
+</div>
+<div style="flex: 1 1 240px; min-width: 0; padding: 20px; border-right: 1px solid #1F1F1F; display: flex; flex-direction: column; gap: 8px">
+<p style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #8A8A8A">status</p>
+<p style="margin: 0; display: flex; align-items: center; gap: 8px; font-size: 15px; line-height: 1.5"><span style="width: 6px; height: 6px; border-radius: 50%; background: {{accent}}"></span>Em produção</p>
+</div>
+<div style="flex: 1 1 240px; min-width: 0; padding: 20px; display: flex; flex-direction: column; gap: 8px">
+<p style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #8A8A8A">stack</p>
+<p style="margin: 0; font-size: 15px; line-height: 1.5">Spring Boot · PostgreSQL 17 · React/TS · Stripe</p>
+</div>
+</section>
+
+<div style="margin-top: 32px; height: 520px; border: 1px solid #262626; border-radius: 10px; background: #111111; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #8A8A8A">[print principal do Fluxen — dashboard]</div>
+
+<section aria-labelledby="s1" style="padding: 80px 0 0; display: flex; flex-wrap: wrap; gap: 16px 48px">
+<p style="margin: 0; flex: 0 0 160px; font-family: 'JetBrains Mono', monospace; font-size: 14px; color: {{accent}}">01</p>
+<div style="flex: 1 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<h2 id="s1" style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 26px; font-weight: 700">O problema</h2>
+<p style="margin: 0; font-size: 17px; line-height: 1.7; color: #A1A1A1">[Em 2–3 frases: que problema o Fluxen resolve e para quem.]</p>
+</div>
+</section>
+
+<section aria-labelledby="s2" style="padding: 80px 0 0; display: flex; flex-wrap: wrap; gap: 16px 48px">
+<p style="margin: 0; flex: 0 0 160px; font-family: 'JetBrains Mono', monospace; font-size: 14px; color: {{accent}}">02</p>
+<div style="flex: 1 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 24px">
+<h2 id="s2" style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 26px; font-weight: 700">Arquitetura</h2>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 13px">
+<div style="padding: 14px 16px; border: 1px solid #333333; border-radius: 8px; background: #111111">navegador</div>
+<span aria-hidden="true" style="color: #8A8A8A">→</span>
+<div style="padding: 14px 16px; border: 1px solid #333333; border-radius: 8px; background: #111111">Traefik<br><span style="color: #8A8A8A; font-size: 11px">TLS</span></div>
+<span aria-hidden="true" style="color: #8A8A8A">→</span>
+<div style="padding: 14px 16px; border: 1px solid {{accent}}; border-radius: 8px; background: #111111">nginx<br><span style="color: #8A8A8A; font-size: 11px">SPA + proxy /api</span></div>
+<span aria-hidden="true" style="color: #8A8A8A">→</span>
+<div style="padding: 14px 16px; border: 1px solid #333333; border-radius: 8px; background: #111111">Spring Boot API<br><span style="color: #8A8A8A; font-size: 11px">rede interna</span></div>
+<span aria-hidden="true" style="color: #8A8A8A">→</span>
+<div style="padding: 14px 16px; border: 1px solid #333333; border-radius: 8px; background: #111111">PostgreSQL 17</div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #A1A1A1">
+<span style="padding: 6px 10px; border: 1px dashed #333333; border-radius: 6px">Stripe · assinaturas</span>
+<span style="padding: 6px 10px; border: 1px dashed #333333; border-radius: 6px">Resend · e-mails</span>
+<span style="padding: 6px 10px; border: 1px dashed #333333; border-radius: 6px">Coolify · deploy por push</span>
+<span style="padding: 6px 10px; border: 1px dashed #333333; border-radius: 6px">VPS própria</span>
+</div>
+<p style="margin: 0; font-size: 17px; line-height: 1.7; color: #A1A1A1">Só o frontend tem domínio público. A API fica na rede interna do Docker e é alcançada pelo proxy do nginx: mesma origem, sem CORS e com o cookie de refresh em SameSite=Strict.</p>
+</div>
+</section>
+
+<section aria-labelledby="s3" style="padding: 80px 0 0; display: flex; flex-wrap: wrap; gap: 16px 48px">
+<p style="margin: 0; flex: 0 0 160px; font-family: 'JetBrains Mono', monospace; font-size: 14px; color: {{accent}}">03</p>
+<div style="flex: 1 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 24px">
+<h2 id="s3" style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 26px; font-weight: 700">Decisões técnicas</h2>
+<div style="display: flex; flex-wrap: wrap; gap: 16px">
+<div style="flex: 1 1 260px; min-width: 0; padding: 20px; border: 1px solid #262626; border-radius: 10px; display: flex; flex-direction: column; gap: 10px">
+<h3 style="margin: 0; font-size: 16px; font-weight: 600">API sem exposição pública</h3>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; color: #A1A1A1">Proxy reverso no nginx em vez de roteamento por path no Traefik: menos superfície de ataque e nenhum problema de CORS.</p>
+</div>
+<div style="flex: 1 1 260px; min-width: 0; padding: 20px; border: 1px solid #262626; border-radius: 10px; display: flex; flex-direction: column; gap: 10px">
+<h3 style="margin: 0; font-size: 16px; font-weight: 600">JWT com refresh token</h3>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; color: #A1A1A1">Refresh em cookie HttpOnly, detecção de reuso de token e bloqueio após tentativas de login.</p>
+</div>
+<div style="flex: 1 1 260px; min-width: 0; padding: 20px; border: 1px solid #262626; border-radius: 10px; display: flex; flex-direction: column; gap: 10px">
+<h3 style="margin: 0; font-size: 16px; font-weight: 600">Migrações versionadas</h3>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; color: #A1A1A1">Esquema do banco evolui com Flyway, aplicado automaticamente a cada deploy.</p>
+</div>
+<div style="flex: 1 1 260px; min-width: 0; padding: 20px; border: 1px solid #262626; border-radius: 10px; display: flex; flex-direction: column; gap: 10px">
+<h3 style="margin: 0; font-size: 16px; font-weight: 600">Cobrança recorrente</h3>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; color: #A1A1A1">Plano premium por assinatura com Stripe e limites do plano gratuito validados no backend.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section aria-labelledby="s4" style="padding: 80px 0 0; display: flex; flex-wrap: wrap; gap: 16px 48px">
+<p style="margin: 0; flex: 0 0 160px; font-family: 'JetBrains Mono', monospace; font-size: 14px; color: {{accent}}">04</p>
+<div style="flex: 1 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+<h2 id="s4" style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 26px; font-weight: 700">Um bug que valeu a pena</h2>
+<div style="border: 1px solid #262626; border-radius: 10px; background: #111111; padding: 20px; font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.9; color: #A1A1A1">
+<div><span style="color: {{accent}}">$</span> curl https://fluxen.net.br/api/auth/login</div>
+<div>HTTP/2 403</div>
+<div><span style="color: {{accent}}">$</span> curl https://fluxen.net.br/apix</div>
+<div>HTTP/2 403 <span style="color: #8A8A8A"># nem existe essa rota</span></div>
+</div>
+<p style="margin: 0; font-size: 17px; line-height: 1.7; color: #A1A1A1">Em produção, toda requisição para /api retornava 403. Parecia CORS, mas a aplicação estava saudável: testei cada camada isoladamente (API direto, nginx, proxy) e só o caminho pelo Traefik falhava. A causa era o Traefik do Coolify reservando o prefixo /api para o próprio dashboard. Resolvi dando prioridade ao roteador da aplicação.</p>
+</div>
+</section>
+
+<section aria-labelledby="s5" style="padding: 80px 0 0; display: flex; flex-wrap: wrap; gap: 16px 48px">
+<p style="margin: 0; flex: 0 0 160px; font-family: 'JetBrains Mono', monospace; font-size: 14px; color: {{accent}}">05</p>
+<div style="flex: 1 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<h2 id="s5" style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 26px; font-weight: 700">Segurança</h2>
+<p style="margin: 0; font-size: 17px; line-height: 1.7; color: #A1A1A1">Antes do lançamento, fiz uma auditoria de IDOR, autenticação, injeção e regras de negócio. Em produção: HSTS, CSP, X-Frame-Options, banco sem acesso externo, painel de deploy fechado no firewall de borda e fail2ban no SSH.</p>
+</div>
+</section>
+
+<section aria-labelledby="s6" style="padding: 80px 0 0; display: flex; flex-wrap: wrap; gap: 16px 48px">
+<p style="margin: 0; flex: 0 0 160px; font-family: 'JetBrains Mono', monospace; font-size: 14px; color: {{accent}}">06</p>
+<div style="flex: 1 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<h2 id="s6" style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 26px; font-weight: 700">O que eu aprendi</h2>
+<p style="margin: 0; font-size: 17px; line-height: 1.7; color: #A1A1A1">[2–3 aprendizados e o que você faria diferente.]</p>
+<p style="margin: 0; font-size: 14px; color: #8A8A8A">Design de interface: [CRÉDITO]</p>
+</div>
+</section>
+
+<nav aria-label="Próximo projeto" style="margin: 96px 0; border-top: 1px solid #1F1F1F; padding-top: 32px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-family: 'JetBrains Mono', monospace; font-size: 14px">
+<a href="Main.dc.html" style="min-height: 44px; display: flex; align-items: center; color: #A1A1A1; text-decoration: none">← todos os projetos</a>
+<a href="Main.dc.html" style="min-height: 44px; display: flex; align-items: center; color: {{accent}}; text-decoration: none">próximo: ritmo →</a>
+</nav>
+
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#8804e5&quot;,&quot;options&quot;:[&quot;#67E8F9&quot;,&quot;#A3E635&quot;,&quot;#FBBF24&quot;,&quot;#F9A8D4&quot;]},&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:3000}}">
+class Component extends DCLogic {
+  renderVals() {
+    return { accent: this.props.accent ?? '#67E8F9' };
+  }
+}
+</script>
+</body>
+</html>

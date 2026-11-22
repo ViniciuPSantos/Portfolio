@@ -1,0 +1,382 @@
+---
+import Prompt from './Prompt.astro';
+import { site } from '../data/site';
+import { routes, t, type Lang } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const d = t(lang);
+const user = site.github.user;
+---
+
+<section
+  class="section gh"
+  aria-labelledby="gh-title"
+  data-github
+  data-state="idle"
+  data-endpoint={routes.githubApi}
+  data-lang={lang}
+>
+  <div class="top">
+    <div class="section-head">
+      <Prompt cmd={`gh api users/${user}`} />
+      <h2 id="gh-title" class="section-title">{d.github.title}</h2>
+    </div>
+    <a class="profile" href={site.github.url} target="_blank" rel="noopener">
+      <span class="live"><span class="dot" aria-hidden="true"></span>{d.github.live} ·</span>
+      @{user} ↗<span class="sr-only"> {d.a11y.newTab}</span>
+    </a>
+  </div>
+
+  <div class="body" aria-busy="true">
+    <p class="sr-only" data-gh="status">{d.github.loading}</p>
+    <div class="stats">
+      <div class="card stat">
+        <p class="num"><span class="skel skel-num" data-gh="repos">—</span></p>
+        <p class="label">{d.github.repos}</p>
+      </div>
+      <div class="card stat">
+        <p class="num"><span class="skel skel-num" data-gh="contributions">—</span></p>
+        <p class="label">{d.github.contributions}</p>
+      </div>
+      <div class="card langs">
+        <p class="label">{d.github.languages}</p>
+        <div class="bar" aria-hidden="true" data-gh="lang-bar">
+          <span class="seg skel" style="flex: 5"></span>
+          <span class="seg skel" style="flex: 3"></span>
+          <span class="seg skel" style="flex: 2"></span>
+        </div>
+        <ul class="lang-list" role="list" aria-label={d.github.langSummary} data-gh="lang-list">
+          <li class="skel skel-line"></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="log">
+      <p class="log-head">
+        <span aria-hidden="true">git log --all --oneline -3</span>
+        <span class="sr-only">{d.github.commits}</span>
+      </p>
+      <ol class="commits" role="list" data-gh="commits">
+        {
+          [0, 1, 2].map(() => (
+            <li class="commit">
+              <span class="skel skel-line" />
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </div>
+</section>
+
+<script>
+  type Activity = {
+    repos: number;
+    contributions: number;
+    languages: { name: string; pct: number }[];
+    commits: { repo: string; message: string; hash: string; url: string; date: string }[];
+  };
+
+  // Tons de cinza + acento; o rótulo em texto ao lado garante que a cor não é a única informação.
+  const SHADES = ['var(--accent)', '#6b6b6b', '#4d4d4d', '#3a3a3a', '#2b2b2b'];
+
+  const section = document.querySelector<HTMLElement>('[data-github]');
+
+  if (section) {
+    const locale = section.dataset.lang === 'en' ? 'en' : 'pt-BR';
+    const $ = (name: string) => section.querySelector<HTMLElement>(`[data-gh="${name}"]`)!;
+    const body = section.querySelector<HTMLElement>('.body')!;
+    const number = new Intl.NumberFormat(locale);
+    const percent = new Intl.NumberFormat(locale, { maximumFractionDigits: 1 });
+    const relative = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' });
+
+    const ago = (iso: string) => {
+      const seconds = (Date.parse(iso) - Date.now()) / 1000;
+      const units: [Intl.RelativeTimeFormatUnit, number][] = [
+        ['year', 31536000],
+        ['month', 2592000],
+        ['week', 604800],
+        ['day', 86400],
+        ['hour', 3600],
+        ['minute', 60],
+      ];
+      for (const [unit, size] of units) {
+        if (Math.abs(seconds) >= size) return relative.format(Math.round(seconds / size), unit);
+      }
+      return relative.format(0, 'minute');
+    };
+
+    const render = (data: Activity) => {
+      $('repos').textContent = number.format(data.repos);
+      $('contributions').textContent = number.format(data.contributions);
+      section.querySelectorAll('.skel').forEach((el) => el.classList.remove('skel', 'skel-num'));
+
+      const bar = $('lang-bar');
+      const list = $('lang-list');
+      bar.replaceChildren();
+      list.replaceChildren();
+      data.languages.forEach((l, i) => {
+        const color = SHADES[i] ?? '#2b2b2b';
+        const seg = document.createElement('span');
+        seg.className = 'seg';
+        seg.style.flex = String(Math.max(l.pct, 1));
+        seg.style.background = color;
+        bar.append(seg);
+
+        const li = document.createElement('li');
+        const swatch = document.createElement('span');
+        swatch.className = 'swatch';
+        swatch.style.background = color;
+        swatch.setAttribute('aria-hidden', 'true');
+        li.append(swatch, `${l.name} ${percent.format(l.pct)}%`);
+        list.append(li);
+      });
+
+      const commits = $('commits');
+      commits.replaceChildren();
+      for (const c of data.commits) {
+        const li = document.createElement('li');
+        li.className = 'commit';
+        const hash = document.createElement('a');
+        hash.className = 'hash';
+        hash.href = c.url;
+        hash.target = '_blank';
+        hash.rel = 'noopener';
+        hash.textContent = c.hash;
+        const msg = document.createElement('span');
+        msg.className = 'msg';
+        const repo = document.createElement('span');
+        repo.className = 'repo';
+        repo.textContent = c.repo;
+        msg.append(repo, ` · ${c.message}`);
+        const time = document.createElement('time');
+        time.dateTime = c.date;
+        time.textContent = ago(c.date);
+        li.append(hash, msg, time);
+        commits.append(li);
+      }
+      if (!data.commits.length) commits.closest('.log')?.remove();
+    };
+
+    section.dataset.state = 'loading';
+    fetch(section.dataset.endpoint ?? '/api/github', { headers: { Accept: 'application/json' } })
+      .then((res) => (res.ok ? (res.json() as Promise<Activity>) : Promise.reject(new Error(String(res.status)))))
+      .then((data) => {
+        render(data);
+        section.dataset.state = 'ready';
+        body.setAttribute('aria-busy', 'false');
+        $('status').textContent = '';
+      })
+      .catch(() => {
+        // Falhou: esconde os dados e fica só o link do perfil, sem erro visível.
+        section.dataset.state = 'error';
+      });
+  }
+</script>
+
+<style>
+  .top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .profile {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .live {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Sem JS ou com erro: mostra só o link do perfil. */
+  .gh[data-state='idle'] .body,
+  .gh[data-state='error'] .body,
+  .gh[data-state='idle'] .live,
+  .gh[data-state='error'] .live {
+    display: none;
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .card {
+    min-width: 0;
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stat {
+    flex: 1 1 200px;
+    gap: 8px;
+  }
+
+  .langs {
+    flex: 2 1 420px;
+    gap: 14px;
+  }
+
+  .num {
+    font-family: var(--font-mono);
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .label {
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+
+  .bar {
+    display: flex;
+    gap: 4px;
+    height: 8px;
+  }
+
+  .bar :global(.seg) {
+    border-radius: 4px;
+    min-width: 4px;
+  }
+
+  .lang-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .lang-list :global(li) {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .lang-list :global(.swatch) {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    flex: none;
+  }
+
+  .log {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .log-head {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border-soft);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+
+  .commits {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-family: var(--font-mono);
+    font-size: 13px;
+  }
+
+  .commits :global(.commit) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    padding: 14px 20px;
+    color: var(--text-dim);
+  }
+
+  .commits :global(.commit + .commit) {
+    border-top: 1px solid var(--border-soft);
+  }
+
+  /* Área de toque de 44px sem mudar a altura da linha. */
+  .commits :global(.hash) {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    margin: -12px 0;
+    color: var(--accent-text);
+    text-decoration: none;
+  }
+
+  .commits :global(.hash:hover) {
+    text-decoration: underline;
+  }
+
+  .commits :global(.msg) {
+    flex: 1 1 240px;
+    min-width: 0;
+    color: var(--text-muted);
+    overflow-wrap: anywhere;
+  }
+
+  .commits :global(.repo) {
+    color: var(--text);
+  }
+
+  .skel,
+  .bar :global(.skel) {
+    background: var(--surface-2);
+    border-radius: 4px;
+    color: transparent;
+  }
+
+  .skel-num {
+    display: inline-block;
+    min-width: 3ch;
+  }
+
+  .skel-line {
+    display: block;
+    height: 14px;
+    width: 100%;
+    max-width: 420px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .gh[data-state='loading'] .skel {
+      animation: pulse 1.4s ease-in-out infinite;
+    }
+  }
+
+  @keyframes pulse {
+    50% {
+      opacity: 0.5;
+    }
+  }
+</style>

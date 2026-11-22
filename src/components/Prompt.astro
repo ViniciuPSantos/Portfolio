@@ -1,0 +1,23 @@
+---
+/** Linha "$ comando" usada acima dos títulos, no estilo terminal. */
+interface Props {
+  cmd: string;
+  id?: string;
+  as?: 'p' | 'h2';
+}
+
+const { cmd, id, as: Tag = 'p' } = Astro.props;
+---
+
+<Tag class="prompt" id={id}><span class="accent" aria-hidden="true">$</span> {cmd}</Tag>
+
+<style>
+  .prompt {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text-dim);
+    overflow-wrap: anywhere;
+  }
+</style>

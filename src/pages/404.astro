@@ -1,0 +1,56 @@
+---
+import Base from '../layouts/Base.astro';
+import Prompt from '../components/Prompt.astro';
+import { routes, t } from '../i18n/utils';
+
+const d = t('pt');
+const en = t('en');
+---
+
+<Base lang="pt" page={{ kind: 'notFound' }} title={d.meta.notFoundTitle} description={d.notFound.text} noindex>
+  <section class="nf" aria-labelledby="nf-title">
+    <Prompt cmd={d.notFound.prompt} />
+    <p class="err mono">{d.notFound.error}</p>
+    <h1 id="nf-title">{d.notFound.title}</h1>
+    <p class="text">{d.notFound.text}</p>
+    <p class="text" lang="en">{en.notFound.text}</p>
+    <div class="links">
+      <a class="btn btn-primary" href={routes.home('pt')}>{d.notFound.home}</a>
+      <a class="btn btn-outline" href={routes.home('en')} lang="en" hreflang="en">{en.notFound.home}</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf {
+    padding: 112px 0 128px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .err {
+    font-size: 14px;
+    color: var(--danger-text);
+  }
+
+  h1 {
+    font-family: var(--font-mono);
+    font-size: clamp(56px, 10vw, 96px);
+    line-height: 1;
+    font-weight: 700;
+  }
+
+  .text {
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-top: 8px;
+  }
+</style>

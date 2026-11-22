@@ -1,0 +1,337 @@
+---
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Prompt from '../components/Prompt.astro';
+import Section from '../components/case/Section.astro';
+import Flow from '../components/case/Flow.astro';
+import Tags from '../components/case/Tags.astro';
+import Cards from '../components/case/Cards.astro';
+import Card from '../components/case/Card.astro';
+import Shell from '../components/case/Shell.astro';
+import Shot from '../components/case/Shot.astro';
+import { getProjects, nextCase, type Project } from '../lib/projects';
+import { routes, t, type Lang } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+  project: Project;
+}
+
+const { lang, project } = Astro.props;
+const d = t(lang);
+const p = project.data;
+const meta = p.meta!;
+const { Content } = await render(project);
+const next = nextCase(await getProjects(lang), project);
+const host = p.links.site ? new URL(p.links.site).host.replace(/^www\./, '') : undefined;
+const title = `${p.title} · Case study · Vinicius Santos`;
+---
+
+<Base lang={lang} page={{ kind: 'project', slug: p.slug }} title={title} description={p.summary} ogType="article">
+  <article>
+    <header class="intro">
+      <Prompt cmd={`cat ${d.nav.projectsPath}/${p.slug}/README.md`} />
+      <h1 id="case-title">{p.title}</h1>
+      <p class="summary">{p.summary}</p>
+      {
+        (host || p.links.repo) && (
+          <div class="ctas">
+            {host && (
+              <a class="btn btn-primary" href={p.links.site} target="_blank" rel="noopener">
+                {d.caseStudy.open} {host} ↗<span class="sr-only"> {d.a11y.newTab}</span>
+              </a>
+            )}
+            {p.links.repo && (
+              <a class:list={['btn', host ? 'btn-outline' : 'btn-primary']} href={p.links.repo} target="_blank" rel="noopener">
+                {d.caseStudy.repo} ↗<span class="sr-only"> {d.a11y.newTab}</span>
+              </a>
+            )}
+          </div>
+        )
+      }
+    </header>
+
+    <section class="meta" aria-label={d.caseStudy.metaLabel}>
+      <dl>
+        <div class="cell">
+          <dt>{d.caseStudy.role}</dt>
+          <dd>{meta.role}</dd>
+        </div>
+        <div class="cell">
+          <dt>{d.caseStudy.period}</dt>
+          <dd>{meta.period}</dd>
+        </div>
+        <div class="cell">
+          <dt>{d.caseStudy.status}</dt>
+          <dd class="status">
+            {p.status === 'producao' && <span class="dot" aria-hidden="true" />}
+            {meta.status}
+          </dd>
+        </div>
+        <div class="cell">
+          <dt>{d.caseStudy.stack}</dt>
+          <dd>{meta.stack}</dd>
+        </div>
+      </dl>
+    </section>
+
+    {
+      p.cover ? (
+        <Image class="cover" src={p.cover} alt={p.coverAlt ?? ''} widths={[720, 1120, 1680]} sizes="(min-width: 1120px) 1072px, 100vw" loading="eager" />
+      ) : (
+        <div class="cover placeholder-media" aria-hidden="true">
+          {p.coverPlaceholder ?? `[${p.title}]`}
+        </div>
+      )
+    }
+
+    <div class="prose">
+      <Content components={{ Section, Flow, Tags, Cards, Card, Shell, Shot }} />
+    </div>
+
+    {
+      p.credit && (
+        <p class="credit">
+          {d.caseStudy.credit}:{' '}
+          {p.creditUrl ? (
+            <a href={p.creditUrl} target="_blank" rel="noopener">
+              {p.credit} ↗<span class="sr-only"> {d.a11y.newTab}</span>
+            </a>
+          ) : (
+            p.credit
+          )}
+        </p>
+      )
+    }
+
+    <nav class="pager" aria-label={d.a11y.projectNav}>
+      <a class="all" href={routes.section(lang, 'projects')}>{d.caseStudy.allProjects}</a>
+      {
+        next && (
+          <a class="next" href={routes.project(lang, next.data.slug)} rel="next">
+            {d.caseStudy.next}: {next.data.slug} →
+          </a>
+        )
+      }
+    </nav>
+  </article>
+</Base>
+
+<style>
+  .intro {
+    padding: 80px 0 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  @media (max-width: 720px) {
+    .intro {
+      padding: 56px 0 40px;
+    }
+  }
+
+  h1 {
+    font-family: var(--font-mono);
+    font-size: clamp(40px, 6vw, 64px);
+    line-height: 1.05;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    overflow-wrap: anywhere;
+  }
+
+  .summary {
+    max-width: 720px;
+    font-size: 20px;
+    line-height: 1.55;
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 480px) {
+    .summary {
+      font-size: 18px;
+    }
+  }
+
+  .ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-top: 8px;
+  }
+
+  .meta dl {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  /* Bordas internas: cada célula desenha a sua à esquerda e em cima, e o
+     contêiner esconde as que caem na borda externa (funciona com flex-wrap). */
+  .cell {
+    flex: 1 1 240px;
+    min-width: 0;
+    padding: 20px;
+    margin: -1px 0 0 -1px;
+    border-left: 1px solid var(--border-soft);
+    border-top: 1px solid var(--border-soft);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  dt {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  dd {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .cover {
+    margin-top: 32px;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+  }
+
+  .cover.placeholder-media {
+    height: clamp(240px, 45vw, 520px);
+    background: var(--surface);
+    font-size: 13px;
+  }
+
+  /* Texto vindo do markdown: filhos diretos de <Section> (.content), sem afetar os componentes. */
+  .prose :global(.content > p),
+  .prose :global(.content > ul:not([class]) > li) {
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--text-muted);
+  }
+
+  .prose :global(.content > ul:not([class])) {
+    margin: 0;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .prose :global(.content > ul:not([class]) > li::marker) {
+    color: var(--text-dim);
+  }
+
+  .prose :global(strong) {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .prose :global(:not(pre) > code) {
+    padding: 1px 5px;
+    border-radius: 4px;
+    background: var(--chip);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    overflow-wrap: anywhere;
+  }
+
+  .prose :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    display: block;
+    overflow-x: auto;
+  }
+
+  .prose :global(th),
+  .prose :global(td) {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border-soft);
+    text-align: left;
+    vertical-align: top;
+    color: var(--text-muted);
+  }
+
+  .prose :global(th) {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-dim);
+    border-bottom-color: var(--border);
+  }
+
+  .prose :global(td:not(:first-child)) {
+    font-family: var(--font-mono);
+    white-space: nowrap;
+  }
+
+  .prose :global(tr:has(strong) td) {
+    background: var(--surface);
+  }
+
+  .credit {
+    margin-top: 48px;
+    font-size: 14px;
+    color: var(--text-dim);
+  }
+
+  .credit a {
+    color: var(--text-muted);
+    text-underline-offset: 3px;
+  }
+
+  .credit a:hover {
+    color: var(--text);
+  }
+
+  .pager {
+    margin: 96px 0;
+    border-top: 1px solid var(--border-soft);
+    padding-top: 32px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 16px;
+    font-family: var(--font-mono);
+    font-size: 14px;
+  }
+
+  .pager a {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+  }
+
+  .all {
+    color: var(--text-muted);
+  }
+
+  .all:hover {
+    color: var(--text);
+  }
+
+  .next {
+    color: var(--accent-text);
+  }
+
+  .next:hover {
+    text-decoration: underline;
+  }
+</style>

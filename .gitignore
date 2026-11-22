@@ -1,0 +1,20 @@
+# build
+dist/
+.astro/
+.vercel/
+
+# deps
+node_modules/
+
+# env (segredos nunca entram no repo)
+.env
+.env.*
+!.env.example
+
+# logs / SO
+npm-debug.log*
+.DS_Store
+Thumbs.db
+
+# originais dos prints (as versões usadas ficam em src/assets/projects/)
+docs/prints/

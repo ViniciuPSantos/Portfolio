@@ -1,0 +1,127 @@
+---
+title: Ritmo
+slug: ritmo
+order: 2
+featured: true
+status: pessoal
+hasCase: true
+summary: A personal app for losing fat while keeping muscle. It logs weight, food, workouts, water and sleep, and adjusts my calorie target based on my own data.
+cardSummary: An app I built for myself. It tracks fat loss, diet and training, and came out of a real problem in my day-to-day life.
+stack: [Java 21, Spring Boot 3.5, MySQL 8.4, Flyway, Spring Session JDBC, React 19, TypeScript, Vite (PWA), Docker, Coolify]
+cardStack: [Spring Boot, MySQL, React, TypeScript, PWA, Docker]
+cover: ../../../assets/projects/ritmo/hoje.png
+coverAlt: Ritmo's Today screen with sample data — check-in available, today's weight, sleep, water and the 30-day weight trend chart.
+meta:
+  role: Personal project, solo developer
+  period: Nov 2026 — present
+  status: In production (VPS with Coolify)
+  stack: Spring Boot · MySQL 8.4 · React/TS (PWA)
+---
+
+import treino from '../../../assets/projects/ritmo/treino.png';
+import checkin from '../../../assets/projects/ritmo/checkin.png';
+
+{/*
+  Source: README, SPEC.md and code from the private "emagrecer" repository.
+  Screenshots: ALWAYS sample data (fake seed), never real data.
+  Tests counted on 2026-11-21: 77 in the API (JUnit + Testcontainers) and 30 in the frontend (Vitest). Recount before publishing.
+*/}
+
+<Section n="01" title="The problem">
+
+I wanted to lose fat without losing muscle, but my weight, diet and training lived in different places, with nothing connecting one to the other. I also didn't want a fixed calorie target pulled from a formula: Ritmo recalculates the target every week based on what I actually ate and how my weight responded.
+
+</Section>
+
+<Section n="02" title="Architecture">
+
+<Flow
+  label="Path of a request"
+  steps={[
+    { label: 'PWA', note: 'React + TS' },
+    { label: 'Traefik', note: 'TLS' },
+    { label: 'nginx', note: 'SPA + /api proxy', highlight: true },
+    { label: 'Spring Boot API', note: 'internal network' },
+    { label: 'MySQL 8.4', note: 'dedicated' },
+  ]}
+/>
+
+<Tags items={['Flyway · migrations', 'Spring Session JDBC', 'daily backup · 14 days', 'Coolify · docker compose']} />
+
+The web app and the API share the same origin: nginx serves the PWA and proxies `/api`, so there's no CORS and the session cookie can be `SameSite=Strict`. No service in the production compose file publishes ports; only `web` receives traffic, through Traefik.
+
+Each calculation runs where it makes the most sense. Trend weight, body composition, adaptive energy expenditure and the weekly check-in live in the Java backend as the source of truth. Workout load progression runs only in the TypeScript frontend, so the next set is suggested instantly, without waiting on the network.
+
+</Section>
+
+<Section n="03" title="Technical decisions">
+
+<Cards>
+  <Card title="Pure engines, tested against fixtures">
+    Trend, body composition, energy expenditure and check-in are pure functions with no I/O. The trend and body composition fixtures come from an independent JavaScript implementation that acts as a second opinion on the Java math.
+  </Card>
+  <Card title="A calorie target that adapts">
+    Daily expenditure is estimated from logged intake and weight change over a 21-day window. The weekly check-in proposes a new target with smoothing and a step cap, and I accept, edit or decline it.
+  </Card>
+  <Card title="Workouts that never lose a set">
+    Each set is saved to a local draft and sent with a client-generated ID to idempotent routes. If the network drops, it retries with exponential backoff (2–60 s). Retries never duplicate, and a 401 prompts a login and then resumes sending.
+  </Card>
+  <Card title="Immutable history">
+    Every food log stores a snapshot of the nutrition values. Fixing a food's label doesn't change past days unless I explicitly ask for a recalculation.
+  </Card>
+</Cards>
+
+<Shot
+  src={treino}
+  alt="Ritmo's Workout screen: the exercises for today's rotation day with sets, rep range and RIR, a start button and the most recent workouts."
+/>
+
+</Section>
+
+<Section n="04" title="A decision made by simulation">
+
+How you measure weight change has a big impact on the proposed target. Instead of eyeballing it, I wrote an integration test that simulates weeks of dieting with early water loss, scale noise and missed weigh-ins across 30 random seeds, and compared five variants of the calculation:
+
+| Variant | Mean error (kcal) | Bias (kcal) | Worst swing between check-ins | Seeds with a jump > 100 kcal |
+|---|---|---|---|---|
+| Smoothed trend | 121 | +107 | 130 | 2 |
+| Regression on raw weigh-ins | 96 | +21 | 150 | 15 |
+| **Regression + ±70 kcal cap** | **95** | **+21** | **70** | **0** |
+| Regression, 28-day window | 92 | +42 | 130 | 4 |
+| Average of both | 90 | +57 | 140 | 5 |
+
+The criterion: at most 3 seeds with a jump above 100 kcal and, among those, the lowest bias. The winner became the code's default, and the test fails if anyone changes the default without the simulation agreeing.
+
+</Section>
+
+<Section n="05" title="Security">
+
+The app stores health data, so authentication was the first thing to be finished:
+
+- **No sign-up.** The single user is created on first boot from an argon2id hash generated outside the app.
+- **Mandatory 2FA from the first login.** TOTP with the secret encrypted with AES-256-GCM, protection against code replay, and 10 recovery codes stored as hashes.
+- **Database-backed sessions** (Spring Session JDBC), an `HttpOnly` and `SameSite=Strict` cookie, a new ID on every login, and double-submit CSRF on every mutation.
+- **Brute force:** 5 failures every 15 minutes per IP and per user returns 429 with `Retry-After`.
+- **Edge:** strict CSP, HSTS, `X-Frame-Options: DENY`. Logs never record request payloads, only method, route, status and timing.
+
+</Section>
+
+<Section n="06" title="Quality and deployment">
+
+- **77 API tests** with JUnit and Testcontainers (a real MySQL) and **30 frontend tests** with Vitest, covering load progression and the workout draft.
+- **End-to-end browser test:** start a workout, cut the network, close and reopen the app offline, bring the network back and check in the API that no set was duplicated.
+- **Deployed on Coolify** with `docker-compose.prod.yml`: a dedicated MySQL, daily backups with 14-day retention and a documented restore procedure.
+- **Installable PWA**, with a service worker only for static assets. Data always comes from the network.
+
+<Shot
+  src={checkin}
+  alt="Step 3 of the weekly check-in with sample data: current target, the proposed new target, the math behind the adjustment and the resulting macros."
+/>
+
+</Section>
+
+<Section n="07" title="Next steps">
+
+Exporting data to CSV/JSON, progress photos and an end-of-rest notification.
+
+</Section>

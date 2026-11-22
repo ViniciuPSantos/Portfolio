@@ -72,24 +72,10 @@ Em **hPanel → Domínios → viniciusps.tech → DNS / Nameservers → Gerencia
 
 ## 5. Redirecionar vinicius-santos-portfolio.vercel.app
 
-O domínio `*.vercel.app` continua servindo o site. Para mandar todo mundo para o domínio novo:
+Já está resolvido no repositório: o `vercel.json` da raiz tem um redirect permanente (308) condicionado ao host, que manda qualquer caminho de `vinicius-santos-portfolio.vercel.app` para o mesmo caminho em `https://viniciusps.tech`. Ele vale a partir do primeiro deploy de produção depois do merge.
 
-1. **Settings → Domains:** na linha de `vinicius-santos-portfolio.vercel.app`, clique em **Edit** e escolha **Redirect to `viniciusps.tech`** (308). Se a opção não aparecer para o domínio `.vercel.app` do projeto, use a alternativa abaixo.
-2. **Alternativa:** crie um projeto Vercel mínimo só para redirecionar, ou peça para eu adicionar um `vercel.json` com um redirect condicionado ao host:
-
-   ```json
-   {
-     "redirects": [
-       {
-         "source": "/:path*",
-         "has": [{ "type": "host", "value": "vinicius-santos-portfolio.vercel.app" }],
-         "destination": "https://viniciusps.tech/:path*",
-         "permanent": true
-       }
-     ]
-   }
-   ```
-
+1. Confira: `curl -sI https://vinicius-santos-portfolio.vercel.app/en/` deve responder `308` com `location: https://viniciusps.tech/en/`.
+2. Os deploys de preview (`*-git-*.vercel.app`) não são afetados, porque o redirect só casa com esse host exato.
 3. Atualize os links antigos que você controla: LinkedIn, README do perfil do GitHub, currículo.
 
 ---

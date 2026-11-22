@@ -1,0 +1,11 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "vinicius-santos-portfolio.vercel.app" }],
+      "destination": "https://viniciusps.tech/:path*",
+      "permanent": true
+    }
+  ]
+}

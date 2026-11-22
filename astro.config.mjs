@@ -27,6 +27,19 @@ export default defineConfig({
     sitemap({
       filter: (page) => !page.includes('/404'),
       i18n: { defaultLocale: 'pt', locales: { pt: 'pt-BR', en: 'en' } },
+      // Os cases têm caminhos traduzidos (/projetos/x/ ↔ /en/projects/x/), que o
+      // i18n do plugin não pareia sozinho: adiciona os alternates aqui.
+      serialize(item) {
+        const m = item.url.match(/\/(?:projetos|en\/projects)\/([a-z0-9-]+)\/$/);
+        if (m) {
+          const base = 'https://viniciusps.tech';
+          item.links = [
+            { lang: 'pt-BR', url: `${base}/projetos/${m[1]}/` },
+            { lang: 'en', url: `${base}/en/projects/${m[1]}/` },
+          ];
+        }
+        return item;
+      },
     }),
   ],
 });

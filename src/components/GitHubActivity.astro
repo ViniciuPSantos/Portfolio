@@ -324,9 +324,18 @@ const user = site.github.user;
     border-top: 1px solid var(--border-soft);
   }
 
+  /* Área de toque de 44px sem mudar a altura da linha. */
   .commits :global(.hash) {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    margin: -12px 0;
     color: var(--accent-text);
     text-decoration: none;
+  }
+
+  .commits :global(.hash:hover) {
+    text-decoration: underline;
   }
 
   .commits :global(.msg) {

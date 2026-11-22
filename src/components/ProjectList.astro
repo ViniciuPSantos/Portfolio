@@ -1,0 +1,137 @@
+---
+import Prompt from './Prompt.astro';
+import ProjectCard from './ProjectCard.astro';
+import { t, type Lang } from '../i18n/utils';
+import type { Project } from '../lib/projects';
+
+interface Props {
+  lang: Lang;
+  projects: Project[];
+}
+
+const { lang, projects } = Astro.props;
+const d = t(lang);
+const featured = projects.filter((p) => p.data.featured);
+const others = projects.filter((p) => !p.data.featured);
+---
+
+<section id={d.ids.projects} class="section featured" aria-labelledby="proj-title">
+  <div class="section-head">
+    <Prompt cmd={d.projects.prompt} />
+    <h2 id="proj-title" class="section-title">{d.projects.title}</h2>
+  </div>
+  <div class="grid">
+    {featured.map((p) => <ProjectCard lang={lang} project={p} />)}
+  </div>
+</section>
+
+{
+  others.length > 0 && (
+    <section class="others" aria-labelledby="others-title">
+      <h2 id="others-title" class="others-title">
+        <span class="sr-only">{d.projects.othersLabel}: </span>
+        <span aria-hidden="true">
+          <span class="accent">$</span> {d.projects.othersPrompt}
+        </span>
+      </h2>
+      <ul class="ls" role="list">
+        {others.map((p) => {
+          const href = p.data.links.repo ?? p.data.links.site ?? '#';
+          return (
+            <li>
+              <a href={href} target="_blank" rel="noopener">
+                <span class="name accent">{p.data.slug}/</span>
+                <span class="desc">{p.data.summary}</span>
+                <span class="tech">{p.data.stack.join(' · ')}</span>
+                <span class="arrow" aria-hidden="true">
+                  ↗
+                </span>
+                <span class="sr-only">{d.a11y.newTab}</span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  )
+}
+
+<style>
+  .featured {
+    padding-bottom: 32px;
+  }
+
+  .grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .others {
+    padding: 32px 0 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .others-title {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text-dim);
+  }
+
+  .ls {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    font-family: var(--font-mono);
+    font-size: 14px;
+  }
+
+  .ls li + li {
+    border-top: 1px solid var(--border-soft);
+  }
+
+  .ls a {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 24px;
+    padding: 18px 20px;
+    text-decoration: none;
+    color: var(--text);
+  }
+
+  .ls a:hover {
+    background: var(--surface);
+  }
+
+  .ls a:focus-visible {
+    outline-offset: -2px;
+  }
+
+  .name {
+    flex: 0 0 140px;
+  }
+
+  .desc {
+    flex: 1 1 320px;
+    min-width: 0;
+    font-family: var(--font-sans);
+    font-size: 15px;
+    color: var(--text-muted);
+  }
+
+  .tech {
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+
+  .arrow {
+    color: var(--text-dim);
+  }
+</style>

@@ -1,0 +1,28 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import ProjectList from '../components/ProjectList.astro';
+import Experience from '../components/Experience.astro';
+import Stack from '../components/Stack.astro';
+import GitHubActivity from '../components/GitHubActivity.astro';
+import ContactForm from '../components/ContactForm.astro';
+import { getProjects } from '../lib/projects';
+import { t, type Lang } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const d = t(lang);
+const projects = await getProjects(lang);
+---
+
+<Base lang={lang} page={{ kind: 'home' }} title={d.meta.homeTitle} description={d.meta.homeDescription}>
+  <Hero lang={lang} />
+  <ProjectList lang={lang} projects={projects} />
+  <Experience lang={lang} />
+  <Stack lang={lang} />
+  <GitHubActivity lang={lang} />
+  <ContactForm lang={lang} />
+</Base>

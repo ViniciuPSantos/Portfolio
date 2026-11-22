@@ -1,0 +1,337 @@
+---
+import Prompt from './Prompt.astro';
+import { isPlaceholder, site } from '../data/site';
+import { routes, t, type Lang } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const d = t(lang);
+const f = d.contact.form;
+const subjects = ['vaga', 'freela', 'outro'] as const;
+const emailIsSet = !isPlaceholder(site.email);
+---
+
+<section id={d.ids.contact} class="section contact" aria-labelledby="contato-title">
+  <div class="info">
+    <Prompt cmd={d.contact.prompt} />
+    <h2 id="contato-title" class="section-title">{d.contact.title}</h2>
+    <p class="lead">{d.contact.text}</p>
+    <dl class="channels">
+      <div class="row">
+        <dt>{d.contact.labels.email}</dt>
+        <dd>{emailIsSet ? <a href={`mailto:${site.email}`}>{site.email}</a> : <span>{site.email}</span>}</dd>
+      </div>
+      <div class="row">
+        <dt>{d.contact.labels.github}</dt>
+        <dd>
+          <a href={site.github.url} target="_blank" rel="noopener">
+            {site.github.user} ↗<span class="sr-only"> {d.a11y.newTab}</span>
+          </a>
+        </dd>
+      </div>
+      <div class="row">
+        <dt>{d.contact.labels.linkedin}</dt>
+        <dd>
+          <a href={site.linkedin.url} target="_blank" rel="noopener">
+            {site.linkedin.label} ↗<span class="sr-only"> {d.a11y.newTab}</span>
+          </a>
+        </dd>
+      </div>
+      <div class="row" id="cv">
+        <dt>{d.contact.labels.cv}</dt>
+        <dd class="cv">
+          <span aria-hidden="true">{d.contact.cvLinks}</span>
+          <a href={routes.cv('pt')} download hreflang="pt-BR" aria-label={`${d.contact.cvPt} (PDF)`}>PT</a>
+          <span aria-hidden="true">·</span>
+          <a href={routes.cv('en')} download hreflang="en" aria-label={`${d.contact.cvEn} (PDF)`}>EN</a>
+        </dd>
+      </div>
+    </dl>
+  </div>
+
+  <form
+    class="form"
+    method="post"
+    action={routes.contactApi}
+    data-contact-form
+    data-msg-sending={f.sending}
+    data-msg-success={f.success}
+    data-msg-invalid={f.errorInvalid}
+    data-msg-rate={f.errorRate}
+    data-msg-error={f.errorGeneric}
+  >
+    <input type="hidden" name="lang" value={lang} />
+
+    <div class="field">
+      <label for="f-nome">{f.name}</label>
+      <input id="f-nome" name="nome" type="text" autocomplete="name" placeholder={f.namePh} required minlength="2" maxlength="100" />
+    </div>
+
+    <div class="field">
+      <label for="f-email">{f.email}</label>
+      <input id="f-email" name="email" type="email" autocomplete="email" placeholder={f.emailPh} required maxlength="254" />
+    </div>
+
+    <fieldset class="field subjects">
+      <legend>{f.subject}</legend>
+      <div class="options">
+        {
+          subjects.map((s, i) => (
+            <label class="option">
+              <input type="radio" name="assunto" value={s} checked={i === 0} required />
+              <span>{f.subjects[s]}</span>
+            </label>
+          ))
+        }
+      </div>
+    </fieldset>
+
+    <div class="field">
+      <label for="f-msg">{f.message}</label>
+      <textarea id="f-msg" name="mensagem" rows="5" placeholder={f.messagePh} required minlength="10" maxlength="5000"></textarea>
+    </div>
+
+    <!-- Honeypot: invisível para pessoas; bots costumam preencher. -->
+    <div class="hp" aria-hidden="true">
+      <label for="f-site">{f.honeypot}</label>
+      <input id="f-site" name="site" type="text" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <button type="submit" class="btn btn-primary submit" data-submit>{f.submit}</button>
+    <p class="status" role="status" aria-live="polite" data-status></p>
+  </form>
+</section>
+
+<style>
+  .contact {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 48px;
+    padding-bottom: 96px;
+  }
+
+  .info {
+    flex: 1 1 360px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .lead {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+
+  .channels {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-family: var(--font-mono);
+    font-size: 14px;
+  }
+
+  .row {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  dt {
+    flex: 0 0 80px;
+    color: var(--text-dim);
+  }
+
+  dd {
+    margin: 0;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  dd a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  dd a:hover {
+    text-decoration: underline;
+  }
+
+  .cv {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .cv a {
+    min-width: 32px;
+    justify-content: center;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .form {
+    flex: 1 1 420px;
+    min-width: 0;
+    padding: 28px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  @media (max-width: 480px) {
+    .form {
+      padding: 20px;
+    }
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  label,
+  legend {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  input[type='text'],
+  input[type='email'],
+  textarea {
+    width: 100%;
+    min-height: 44px;
+    padding: 0 14px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+  }
+
+  textarea {
+    padding: 12px 14px;
+    resize: vertical;
+    line-height: 1.5;
+  }
+
+  ::placeholder {
+    color: var(--text-dim);
+    opacity: 1;
+  }
+
+  input:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid var(--accent-text);
+    outline-offset: 0;
+    border-color: transparent;
+  }
+
+  .subjects {
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+
+  legend {
+    padding: 0;
+    margin-bottom: 8px;
+  }
+
+  .options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .option {
+    position: relative;
+    display: flex;
+  }
+
+  .option input {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .option span {
+    min-height: 44px;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 13px;
+  }
+
+  .option input:hover + span {
+    color: var(--text);
+  }
+
+  .option input:checked + span {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-accent);
+  }
+
+  .option input:focus-visible + span {
+    outline: 2px solid var(--accent-text);
+    outline-offset: 2px;
+  }
+
+  .hp {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .submit {
+    min-height: 48px;
+    justify-content: center;
+    border: none;
+  }
+
+  .submit:disabled {
+    opacity: 0.7;
+    cursor: progress;
+  }
+
+  .status:empty {
+    display: none;
+  }
+
+  .status {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-muted);
+  }
+
+  .status[data-kind='success'] {
+    color: var(--text);
+  }
+
+  .status[data-kind='error'] {
+    color: var(--danger-text);
+  }
+</style>

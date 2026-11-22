@@ -1,0 +1,108 @@
+---
+import Prompt from './Prompt.astro';
+import { t, type Lang } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const d = t(Astro.props.lang);
+---
+
+<section id={d.ids.experience} class="section" aria-labelledby="exp-title">
+  <div class="section-head">
+    <Prompt cmd={d.experience.prompt} />
+    <h2 id="exp-title" class="section-title">{d.experience.title}</h2>
+  </div>
+  <ol class="log" role="list">
+    {
+      d.experience.items.map((item) => (
+        <li class="entry">
+          <p class="period">{item.period}</p>
+          <div class="content">
+            <h3>
+              {item.org} <span class="role">· {item.role}</span>
+            </h3>
+            {'bullets' in item && (
+              <ul class="bullets">
+                {item.bullets.map((b) => (
+                  <li>{b}</li>
+                ))}
+              </ul>
+            )}
+            {'text' in item && <p class="text">{item.text}</p>}
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<style>
+  .log {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .entry {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 40px;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--border-soft);
+  }
+
+  .entry:first-child {
+    padding-top: 0;
+  }
+
+  .period {
+    flex: 0 0 180px;
+    padding-top: 4px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+
+  .content {
+    flex: 1 1 480px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  h3 {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .role {
+    font-weight: 400;
+    color: var(--text-muted);
+  }
+
+  .bullets {
+    padding-left: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+
+  .bullets li::marker {
+    color: var(--text-dim);
+  }
+
+  .text {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+</style>

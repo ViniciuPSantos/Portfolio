@@ -1,0 +1,91 @@
+---
+title: Fluxen
+slug: fluxen
+order: 1
+featured: true
+status: producao
+hasCase: true
+summary: A personal finance SaaS with free and premium plans. Built and run by me, from the database to the server.
+cardSummary: Personal finance SaaS (freemium). I built the backend, frontend and infrastructure on my own, from authentication and recurring billing to deploys on my own VPS.
+stack: [Spring Boot, PostgreSQL, React, TypeScript, Stripe, Docker]
+coverPlaceholder: "[main Fluxen screenshot — dashboard]"
+links:
+  site: https://fluxen.net.br
+meta:
+  role: "Solo developer: backend, frontend and infrastructure"
+  period: "[PERIOD]"
+  status: In production
+  stack: Spring Boot · PostgreSQL 17 · React/TS · Stripe
+credit: "[CREDIT]"
+---
+
+<Section n="01" title="The problem">
+
+[In 2–3 sentences: what problem Fluxen solves and for whom.]
+
+</Section>
+
+<Section n="02" title="Architecture">
+
+<Flow
+  label="Path of a request"
+  steps={[
+    { label: 'browser' },
+    { label: 'Traefik', note: 'TLS' },
+    { label: 'nginx', note: 'SPA + /api proxy', highlight: true },
+    { label: 'Spring Boot API', note: 'internal network' },
+    { label: 'PostgreSQL 17' },
+  ]}
+/>
+
+<Tags items={['Stripe · subscriptions', 'Resend · email', 'Coolify · push to deploy', 'Self-managed VPS']} />
+
+Only the frontend has a public domain. The API lives on Docker's internal network and is reached through the nginx proxy: same origin, no CORS, and the refresh cookie can stay `SameSite=Strict`.
+
+</Section>
+
+<Section n="03" title="Technical decisions">
+
+<Cards>
+  <Card title="No public API exposure">
+    A reverse proxy in nginx instead of path-based routing in Traefik: a smaller attack surface and no CORS issues at all.
+  </Card>
+  <Card title="JWT with refresh tokens">
+    Refresh token in an HttpOnly cookie, token reuse detection and lockout after repeated failed logins.
+  </Card>
+  <Card title="Versioned migrations">
+    The database schema evolves with Flyway and is applied automatically on every deploy.
+  </Card>
+  <Card title="Recurring billing">
+    A subscription-based premium plan with Stripe, with free-plan limits enforced on the backend.
+  </Card>
+</Cards>
+
+</Section>
+
+<Section n="04" title="A bug worth the trouble">
+
+<Shell
+  lines={[
+    { cmd: 'curl https://fluxen.net.br/api/auth/login' },
+    { out: 'HTTP/2 403' },
+    { cmd: 'curl https://fluxen.net.br/apix' },
+    { out: 'HTTP/2 403', comment: "# this route doesn't even exist" },
+  ]}
+/>
+
+In production, every request to `/api` came back 403. It looked like CORS, but the application was healthy: I tested each layer in isolation (the API directly, nginx, the proxy) and only the path through Traefik failed. The cause was Coolify's Traefik reserving the `/api` prefix for its own dashboard. I fixed it by giving the application's router a higher priority.
+
+</Section>
+
+<Section n="05" title="Security">
+
+Before launch, I audited the app for IDOR, authentication flaws, injection and business-rule abuse. In production: HSTS, CSP, X-Frame-Options, a database with no external access, the deploy panel closed off at the edge firewall, and fail2ban on SSH.
+
+</Section>
+
+<Section n="06" title="What I learned">
+
+[2–3 lessons learned and what you would do differently.]
+
+</Section>

@@ -1,0 +1,119 @@
+---
+title: Telegram Assistant
+slug: telegram-bot
+order: 3
+featured: true
+status: producao
+hasCase: true
+summary: A personal assistant on Telegram, built as a hub of pluggable modules. It currently handles reminders and price tracking, and runs in production on my VPS.
+cardSummary: Personal Telegram assistant with pluggable modules (reminders and price tracking), tests, CI and automatic deploys.
+stack: [Python 3.12, python-telegram-bot, APScheduler, SQLAlchemy 2.0 async, Alembic, httpx, pytest, Docker, Coolify]
+cardStack: [Python, python-telegram-bot, SQLAlchemy, APScheduler, Docker]
+coverPlaceholder: "[screenshot: a /reminder being created and the alert arriving with the Done / Snooze 1h buttons]"
+links:
+  repo: https://github.com/ViniciuPSantos/TelegramBot
+meta:
+  role: Personal project, solo developer
+  period: Nov 2026 — present
+  status: In production (VPS with Coolify)
+  stack: Python · async SQLAlchemy · APScheduler · Docker
+---
+
+{/* Tests recounted on 2026-11-21: 101 test functions. Recount before publishing. */}
+
+<Section n="01" title="The problem">
+
+[In 2–3 sentences, in your own words. Suggestion: I wanted a single place for my everyday automations, like remembering to pay bills and tracking product prices, without installing yet another app. Telegram is already on my phone, so the bot became the interface.]
+
+</Section>
+
+<Section n="02" title="Architecture">
+
+Each feature is an independent module that exposes `register(app, ctx)` and receives an `AppContext` with the shared dependencies (settings, database, scheduler). Adding a new module means adding one line to the module list.
+
+<Flow
+  label="From a user message to the database"
+  steps={[
+    { label: 'Telegram' },
+    { label: 'python-telegram-bot', note: 'long polling' },
+    { label: 'authentication', note: 'by chat_id', highlight: true },
+    { label: 'handlers' },
+    { label: 'service' },
+    { label: 'repository' },
+    { label: 'SQLite / Postgres' },
+  ]}
+/>
+
+<Flow
+  label="Scheduled alerts"
+  steps={[
+    { label: 'APScheduler', note: 'every 30s' },
+    { label: 'service' },
+    { label: 'Notifier', highlight: true },
+    { label: 'Telegram' },
+  ]}
+/>
+
+<Tags items={['Docker', 'Coolify', 'GitHub Actions', 'Alembic']} />
+
+</Section>
+
+<Section n="03" title="Technical decisions">
+
+<Cards>
+  <Card title="The database is the source of truth">
+    Instead of scheduling one job per reminder, a single job polls the database every 30s. Nothing is lost if the bot restarts, and reminders that came due while it was down are delivered on startup, flagged as late.
+  </Card>
+  <Card title="Business rules know nothing about Telegram">
+    The service receives a `Notifier` (a `Protocol`) and works in UTC only. Handlers just translate input and output, and views are pure functions.
+  </Card>
+  <Card title="UTC in the database, time zones at the edge">
+    A `TypeDecorator` enforces UTC even on SQLite. Conversion to `America/Sao_Paulo` only happens for display.
+  </Card>
+  <Card title="At-least-once delivery">
+    An alert is only marked as sent after Telegram confirms delivery.
+  </Card>
+  <Card title="Money in cents">
+    Prices are `int` cents in the database and in the rules. `Decimal` only shows up when parsing what the user typed. Never `float`.
+  </Card>
+</Cards>
+
+</Section>
+
+<Section n="04" title="Price tracking: polite and safe scraping">
+
+The tracker reads prices from the stores' JSON-LD and sends an alert when a price reaches the target, drops by 1% or more, or when a product is back in stock.
+
+- **Polite requests:** each product is checked every 8h (±30 min), in batches of 10, with 3–8s pauses between requests. If a store answers 403, 429 or 503, it's paused for 6h. No proxies and no captcha bypassing.
+- **SSRF protection:** the bot only fetches links from allowed domains and checks the domain again after redirects, since the container shares a network with other services.
+- **Private bot:** it only answers the configured `chat_id`. Anyone else is ignored, and the attempt is logged.
+
+</Section>
+
+<Section n="05" title="Quality and deployment">
+
+- **101 tests** with pytest and zero network access: fake clock, store and notifier on top of an in-memory SQLite.
+- **CI on GitHub Actions:** lint and formatting (ruff), tests, a check that migrations match the models, and the Docker image build.
+- `main` is protected and only takes code through PRs with green checks. Every merge triggers an automatic deploy on Coolify.
+- The container exposes no ports (long polling), has CPU and memory limits, and only receives secrets at runtime, never at build time.
+
+<Flow
+  label="From pull request to production"
+  steps={[
+    { label: 'PR' },
+    { label: 'CI', note: 'lint · tests · migrations · build', highlight: true },
+    { label: 'merge to main' },
+    { label: 'webhook' },
+    { label: 'Coolify' },
+    { label: 'container live' },
+  ]}
+/>
+
+</Section>
+
+<Section n="06" title="Next steps and lessons learned">
+
+- Upcoming modules: Amazon and Mercado Livre support in the price tracker, plus a daily summary.
+- [2–3 lessons learned, in your own words.]
+
+</Section>

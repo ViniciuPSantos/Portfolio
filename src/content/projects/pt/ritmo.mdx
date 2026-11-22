@@ -1,0 +1,120 @@
+---
+title: Ritmo
+slug: ritmo
+order: 2
+featured: true
+status: pessoal
+hasCase: true
+summary: App pessoal para perder gordura preservando massa magra. Registra peso, comida, treinos, água e sono, e ajusta a meta de calorias a partir dos meus próprios dados.
+cardSummary: App que criei para uso próprio. Acompanha emagrecimento, dieta e treinos. Nasceu de um problema real do meu dia a dia.
+stack: [Java 21, Spring Boot 3.5, MySQL 8.4, Flyway, Spring Session JDBC, React 19, TypeScript, Vite (PWA), Docker, Coolify]
+cardStack: [Spring Boot, MySQL, React, TypeScript, PWA, Docker]
+coverPlaceholder: "[print com dados de exemplo: tela Hoje no celular, com anéis de kcal e macros, peso do dia com tendência e card de check-in]"
+meta:
+  role: Projeto pessoal, desenvolvimento solo
+  period: nov 2026 — atual
+  status: Em produção (VPS com Coolify)
+  stack: Spring Boot · MySQL 8.4 · React/TS (PWA)
+---
+
+{/*
+  Fonte: README, SPEC.md e código do repositório privado "emagrecer".
+  Prints: SEMPRE com dados de exemplo (seed fictício), nunca dados reais.
+  Testes contados em 21/11/2026: 77 na API (JUnit + Testcontainers) e 30 no front (Vitest). Reconte antes de publicar.
+*/}
+
+<Section n="01" title="O problema">
+
+[Em 2–3 frases, com suas palavras. Sugestão: eu queria perder gordura sem perder massa magra e precisava juntar peso, dieta e treino num lugar só. Em vez de seguir uma meta de calorias fixa tirada de fórmula, queria que o app recalculasse a meta toda semana a partir do que eu realmente comi e de como meu peso reagiu.]
+
+<Shot label="[print com dados de exemplo: Progresso, gráfico de peso bruto vs. tendência e gasto calórico estimado]" />
+
+</Section>
+
+<Section n="02" title="Arquitetura">
+
+<Flow
+  label="Caminho de uma requisição"
+  steps={[
+    { label: 'PWA', note: 'React + TS' },
+    { label: 'Traefik', note: 'TLS' },
+    { label: 'nginx', note: 'SPA + proxy /api', highlight: true },
+    { label: 'Spring Boot API', note: 'rede interna' },
+    { label: 'MySQL 8.4', note: 'dedicado' },
+  ]}
+/>
+
+<Tags items={['Flyway · migrações', 'Spring Session JDBC', 'backup diário · 14 dias', 'Coolify · docker compose']} />
+
+Web e API ficam na mesma origem: o nginx serve o PWA e faz proxy de `/api`, então não existe CORS e o cookie de sessão pode ser `SameSite=Strict`. Nenhum serviço do compose de produção publica portas; só o `web` recebe tráfego, pelo Traefik.
+
+Cada cálculo roda onde faz mais sentido. Peso de tendência, composição corporal, gasto calórico adaptativo e check-in ficam no backend, em Java, como fonte da verdade. A progressão de carga do treino roda só no front, em TypeScript, para sugerir a próxima série na hora, sem depender da rede.
+
+</Section>
+
+<Section n="03" title="Decisões técnicas">
+
+<Cards>
+  <Card title="Motores puros, testados com fixtures">
+    Tendência, composição corporal, gasto calórico e check-in são funções puras, sem I/O. As fixtures de tendência e composição corporal vêm de uma implementação independente em JS, que serve de segunda opinião para as contas do Java.
+  </Card>
+  <Card title="Meta de calorias que se ajusta">
+    O gasto diário é estimado pela ingestão registrada e pela variação do peso numa janela de 21 dias. O check-in semanal propõe uma nova meta com suavização e teto de passo, e eu aceito, edito ou recuso.
+  </Card>
+  <Card title="Treino que não perde séries">
+    Cada série é gravada num rascunho local e enviada com ID gerado no cliente para rotas idempotentes. Se a rede cair, reenvia com backoff exponencial (2 a 60 s). Reenviar nunca duplica, e um 401 pede login e retoma o envio.
+  </Card>
+  <Card title="Histórico imutável">
+    Cada registro de comida guarda um snapshot dos valores nutricionais. Corrigir um alimento não muda os dias passados, a menos que eu peça o recálculo.
+  </Card>
+</Cards>
+
+<Shot label="[print com dados de exemplo: Treino em andamento, com séries, alvo, sugestão da próxima carga e rest timer]" />
+
+</Section>
+
+<Section n="04" title="Uma decisão tomada por simulação">
+
+O jeito de medir a variação do peso muda muito a meta proposta. Em vez de escolher no olho, escrevi um teste de integração que simula semanas de dieta com perda de água no início, ruído de balança e dias sem pesagem, em 30 sementes aleatórias, e comparei cinco variantes do cálculo:
+
+| Variante | Erro médio (kcal) | Viés (kcal) | Pior variação entre check-ins | Sementes com salto > 100 kcal |
+|---|---|---|---|---|
+| Tendência suavizada | 121 | +107 | 130 | 2 |
+| Regressão nos pesos reais | 96 | +21 | 150 | 15 |
+| **Regressão + teto de ±70 kcal** | **95** | **+21** | **70** | **0** |
+| Regressão, janela de 28 dias | 92 | +42 | 130 | 4 |
+| Média das duas | 90 | +57 | 140 | 5 |
+
+O critério: no máximo 3 sementes com salto acima de 100 kcal e, entre essas, o menor viés. A vencedora virou o padrão do código, e o teste falha se alguém mudar o padrão sem que a simulação concorde.
+
+</Section>
+
+<Section n="05" title="Segurança">
+
+O app guarda dados de saúde, então a autenticação foi a primeira coisa a ficar pronta:
+
+- **Sem cadastro.** O único usuário nasce no primeiro boot, a partir de um hash argon2id gerado fora do app.
+- **2FA obrigatório desde o primeiro login.** TOTP com segredo cifrado em AES-256-GCM, proteção contra reuso do mesmo código e 10 códigos de recuperação guardados com hash.
+- **Sessão no banco** (Spring Session JDBC), cookie `HttpOnly` e `SameSite=Strict`, novo ID a cada login e CSRF com double-submit em toda mutação.
+- **Força bruta:** 5 falhas a cada 15 minutos por IP e por usuário resultam em 429 com `Retry-After`.
+- **Borda:** CSP restrita, HSTS, `X-Frame-Options: DENY`. Os logs nunca registram o conteúdo das requisições, só método, rota, status e tempo.
+
+</Section>
+
+<Section n="06" title="Qualidade e deploy">
+
+- **77 testes na API** com JUnit e Testcontainers (MySQL de verdade) e **30 no front** com Vitest, cobrindo a progressão de carga e o rascunho do treino.
+- **Teste de ponta a ponta no navegador:** começa um treino, derruba a rede, fecha e reabre o app offline, volta a rede e confere na API que nenhuma série foi duplicada.
+- **Deploy no Coolify** com `docker-compose.prod.yml`: MySQL dedicado, backup diário com retenção de 14 dias e procedimento de restore documentado.
+- **PWA instalável**, com service worker só para os assets estáticos. Os dados sempre vêm da rede.
+
+<Shot label="[print com dados de exemplo: Check-in semanal, passo 3, com a proposta de nova meta e o motivo]" />
+
+</Section>
+
+<Section n="07" title="Próximos passos e aprendizados">
+
+- Próximos passos: exportar os dados em CSV/JSON, fotos de progresso e notificação no fim do descanso.
+- [2–3 aprendizados com suas palavras.]
+
+</Section>

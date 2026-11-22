@@ -1,9 +1,5 @@
 ---
-import Base from '../../layouts/Base.astro';
-import { t } from '../../i18n/utils';
-const d = t('en');
+import HomePage from '../../views/HomePage.astro';
 ---
 
-<Base lang="en" page={{ kind: 'home' }} title={d.meta.homeTitle} description={d.meta.homeDescription}>
-  <p>{d.hero.tagline}</p>
-</Base>
+<HomePage lang="en" />

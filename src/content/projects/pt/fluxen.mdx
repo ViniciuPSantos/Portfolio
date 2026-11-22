@@ -1,0 +1,91 @@
+---
+title: Fluxen
+slug: fluxen
+order: 1
+featured: true
+status: producao
+hasCase: true
+summary: SaaS de finanças pessoais com plano gratuito e premium. Construído e operado por mim, do banco de dados ao servidor.
+cardSummary: SaaS de finanças pessoais (freemium). Desenvolvi sozinho backend, frontend e infraestrutura, da autenticação e cobrança recorrente ao deploy em VPS própria.
+stack: [Spring Boot, PostgreSQL, React, TypeScript, Stripe, Docker]
+coverPlaceholder: "[print principal do Fluxen — dashboard]"
+links:
+  site: https://fluxen.net.br
+meta:
+  role: "Desenvolvimento solo: backend, frontend e infra"
+  period: "[PERÍODO]"
+  status: Em produção
+  stack: Spring Boot · PostgreSQL 17 · React/TS · Stripe
+credit: "[CRÉDITO]"
+---
+
+<Section n="01" title="O problema">
+
+[Em 2–3 frases: que problema o Fluxen resolve e para quem.]
+
+</Section>
+
+<Section n="02" title="Arquitetura">
+
+<Flow
+  label="Caminho de uma requisição"
+  steps={[
+    { label: 'navegador' },
+    { label: 'Traefik', note: 'TLS' },
+    { label: 'nginx', note: 'SPA + proxy /api', highlight: true },
+    { label: 'Spring Boot API', note: 'rede interna' },
+    { label: 'PostgreSQL 17' },
+  ]}
+/>
+
+<Tags items={['Stripe · assinaturas', 'Resend · e-mails', 'Coolify · deploy por push', 'VPS própria']} />
+
+Só o frontend tem domínio público. A API fica na rede interna do Docker e é alcançada pelo proxy do nginx: mesma origem, sem CORS e com o cookie de refresh em `SameSite=Strict`.
+
+</Section>
+
+<Section n="03" title="Decisões técnicas">
+
+<Cards>
+  <Card title="API sem exposição pública">
+    Proxy reverso no nginx em vez de roteamento por path no Traefik: menos superfície de ataque e nenhum problema de CORS.
+  </Card>
+  <Card title="JWT com refresh token">
+    Refresh em cookie HttpOnly, detecção de reuso de token e bloqueio após tentativas de login.
+  </Card>
+  <Card title="Migrações versionadas">
+    Esquema do banco evolui com Flyway, aplicado automaticamente a cada deploy.
+  </Card>
+  <Card title="Cobrança recorrente">
+    Plano premium por assinatura com Stripe e limites do plano gratuito validados no backend.
+  </Card>
+</Cards>
+
+</Section>
+
+<Section n="04" title="Um bug que valeu a pena">
+
+<Shell
+  lines={[
+    { cmd: 'curl https://fluxen.net.br/api/auth/login' },
+    { out: 'HTTP/2 403' },
+    { cmd: 'curl https://fluxen.net.br/apix' },
+    { out: 'HTTP/2 403', comment: '# nem existe essa rota' },
+  ]}
+/>
+
+Em produção, toda requisição para `/api` retornava 403. Parecia CORS, mas a aplicação estava saudável: testei cada camada isoladamente (API direto, nginx, proxy) e só o caminho pelo Traefik falhava. A causa era o Traefik do Coolify reservando o prefixo `/api` para o próprio dashboard. Resolvi dando prioridade ao roteador da aplicação.
+
+</Section>
+
+<Section n="05" title="Segurança">
+
+Antes do lançamento, fiz uma auditoria de IDOR, autenticação, injeção e regras de negócio. Em produção: HSTS, CSP, X-Frame-Options, banco sem acesso externo, painel de deploy fechado no firewall de borda e fail2ban no SSH.
+
+</Section>
+
+<Section n="06" title="O que eu aprendi">
+
+[2–3 aprendizados e o que você faria diferente.]
+
+</Section>

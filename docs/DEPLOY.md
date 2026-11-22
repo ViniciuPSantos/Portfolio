@@ -16,7 +16,7 @@ O app antigo (CRA) ficava na subpasta `portfolio/`. O Astro agora fica na **raiz
    - **Build Command:** deixe o padrão ou use `npm run build` (roda `astro check` antes do `astro build`).
    - **Output Directory:** deixe o padrão. O adapter `@astrojs/vercel` gera `.vercel/output`, que a Vercel detecta sozinha.
    - **Install Command:** padrão (`npm install`).
-   - **Node.js Version:** `22.x` ou mais nova (o Astro 7 exige Node ≥ 22.23).
+   - **Node.js Version:** `24.x`. O `engines` do `package.json` fixa `24.x` e tem prioridade sobre essa configuração; com um intervalo aberto (`>=`), a Vercel buildava com a versão mais nova (26), que as funções não suportam.
 2. **Settings → Environment Variables** (marque *Production* e *Preview*):
 
    | Variável | Valor |

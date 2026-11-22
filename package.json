@@ -23,7 +23,7 @@
     "zod": "^4.6.7"
   },
   "engines": {
-    "node": ">=22.23.4"
+    "node": "24.x"
   },
   "devDependencies": {
     "@fontsource/inter": "^5.3.0",

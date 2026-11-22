@@ -21,7 +21,7 @@ npm run build          # astro check + astro build
 npm run og             # regenera public/og/og-{pt,en}.png
 ```
 
-Requer Node ≥ 22.23.
+Requer Node 24 (fixado em `engines`; é a versão usada no build e nas funções da Vercel).
 
 ## Estrutura
 

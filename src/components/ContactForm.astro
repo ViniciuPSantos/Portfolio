@@ -105,6 +105,56 @@ const emailIsSet = !isPlaceholder(site.email);
   </form>
 </section>
 
+<script>
+  // Com JS: envia por fetch e anuncia o estado em aria-live. Sem JS, o <form> faz POST normal.
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+
+  if (form) {
+    const button = form.querySelector<HTMLButtonElement>('[data-submit]')!;
+    const status = form.querySelector<HTMLElement>('[data-status]')!;
+    const label = button.textContent ?? '';
+    const msg = (key: string) => form.dataset[key] ?? '';
+
+    const setStatus = (text: string, kind: 'info' | 'success' | 'error') => {
+      status.dataset.kind = kind;
+      status.textContent = text;
+    };
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (button.disabled) return;
+
+      const data = Object.fromEntries(new FormData(form));
+      button.disabled = true;
+      button.textContent = msg('msgSending');
+      setStatus(msg('msgSending'), 'info');
+
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(data),
+        });
+        if (res.ok) {
+          form.reset();
+          setStatus(msg('msgSuccess'), 'success');
+        } else if (res.status === 400) {
+          setStatus(msg('msgInvalid'), 'error');
+        } else if (res.status === 429) {
+          setStatus(msg('msgRate'), 'error');
+        } else {
+          setStatus(msg('msgError'), 'error');
+        }
+      } catch {
+        setStatus(msg('msgError'), 'error');
+      } finally {
+        button.disabled = false;
+        button.textContent = label;
+      }
+    });
+  }
+</script>
+
 <style>
   .contact {
     flex-direction: row;

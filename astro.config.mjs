@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig, envField } from 'astro/config';
 import vercel from '@astrojs/vercel';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
@@ -7,6 +7,15 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://viniciusps.tech',
   output: 'static',
+  // Segredos lidos em runtime pelos endpoints (nunca embutidos no build nem expostos ao cliente).
+  env: {
+    schema: {
+      GITHUB_TOKEN: envField.string({ context: 'server', access: 'secret', optional: true }),
+      RESEND_API_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
+      CONTACT_TO_EMAIL: envField.string({ context: 'server', access: 'secret', optional: true }),
+      CONTACT_FROM_EMAIL: envField.string({ context: 'server', access: 'secret', optional: true }),
+    },
+  },
   adapter: vercel(),
   i18n: {
     defaultLocale: 'pt',

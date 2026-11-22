@@ -9,13 +9,17 @@ summary: A personal app for losing fat while keeping muscle. It logs weight, foo
 cardSummary: An app I built for myself. It tracks fat loss, diet and training, and came out of a real problem in my day-to-day life.
 stack: [Java 21, Spring Boot 3.5, MySQL 8.4, Flyway, Spring Session JDBC, React 19, TypeScript, Vite (PWA), Docker, Coolify]
 cardStack: [Spring Boot, MySQL, React, TypeScript, PWA, Docker]
-coverPlaceholder: "[screenshot with sample data: the Today screen on mobile, with calorie and macro rings, today's weight with its trend and the check-in card]"
+cover: ../../../assets/projects/ritmo/hoje.png
+coverAlt: Ritmo's Today screen with sample data — check-in available, today's weight, sleep, water and the 30-day weight trend chart.
 meta:
   role: Personal project, solo developer
   period: Nov 2026 — present
   status: In production (VPS with Coolify)
   stack: Spring Boot · MySQL 8.4 · React/TS (PWA)
 ---
+
+import treino from '../../../assets/projects/ritmo/treino.png';
+import checkin from '../../../assets/projects/ritmo/checkin.png';
 
 {/*
   Source: README, SPEC.md and code from the private "emagrecer" repository.
@@ -26,8 +30,6 @@ meta:
 <Section n="01" title="The problem">
 
 I wanted to lose fat without losing muscle, but my weight, diet and training lived in different places, with nothing connecting one to the other. I also didn't want a fixed calorie target pulled from a formula: Ritmo recalculates the target every week based on what I actually ate and how my weight responded.
-
-<Shot label="[screenshot with sample data: Progress, chart of raw weight vs. trend and estimated energy expenditure]" />
 
 </Section>
 
@@ -69,7 +71,10 @@ Each calculation runs where it makes the most sense. Trend weight, body composit
   </Card>
 </Cards>
 
-<Shot label="[screenshot with sample data: workout in progress, with sets, targets, the suggested next load and the rest timer]" />
+<Shot
+  src={treino}
+  alt="Ritmo's Workout screen: the exercises for today's rotation day with sets, rep range and RIR, a start button and the most recent workouts."
+/>
 
 </Section>
 
@@ -108,7 +113,10 @@ The app stores health data, so authentication was the first thing to be finished
 - **Deployed on Coolify** with `docker-compose.prod.yml`: a dedicated MySQL, daily backups with 14-day retention and a documented restore procedure.
 - **Installable PWA**, with a service worker only for static assets. Data always comes from the network.
 
-<Shot label="[screenshot with sample data: weekly check-in, step 3, with the proposed new target and the reasoning]" />
+<Shot
+  src={checkin}
+  alt="Step 3 of the weekly check-in with sample data: current target, the proposed new target, the math behind the adjustment and the resulting macros."
+/>
 
 </Section>
 

@@ -9,13 +9,17 @@ summary: App pessoal para perder gordura preservando massa magra. Registra peso,
 cardSummary: App que criei para uso próprio. Acompanha emagrecimento, dieta e treinos. Nasceu de um problema real do meu dia a dia.
 stack: [Java 21, Spring Boot 3.5, MySQL 8.4, Flyway, Spring Session JDBC, React 19, TypeScript, Vite (PWA), Docker, Coolify]
 cardStack: [Spring Boot, MySQL, React, TypeScript, PWA, Docker]
-coverPlaceholder: "[print com dados de exemplo: tela Hoje no celular, com anéis de kcal e macros, peso do dia com tendência e card de check-in]"
+cover: ../../../assets/projects/ritmo/hoje.png
+coverAlt: Tela Hoje do Ritmo com dados de exemplo — check-in disponível, peso do dia, sono, água e gráfico de tendência do peso nos últimos 30 dias.
 meta:
   role: Projeto pessoal, desenvolvimento solo
   period: nov 2026 — atual
   status: Em produção (VPS com Coolify)
   stack: Spring Boot · MySQL 8.4 · React/TS (PWA)
 ---
+
+import treino from '../../../assets/projects/ritmo/treino.png';
+import checkin from '../../../assets/projects/ritmo/checkin.png';
 
 {/*
   Fonte: README, SPEC.md e código do repositório privado "emagrecer".
@@ -26,8 +30,6 @@ meta:
 <Section n="01" title="O problema">
 
 Eu queria perder gordura sem perder massa magra, mas peso, dieta e treino ficavam em lugares diferentes, sem nada que ligasse uma coisa à outra. Também não queria uma meta de calorias fixa, tirada de fórmula: o Ritmo recalcula a meta toda semana com base no que eu realmente comi e em como o meu peso respondeu.
-
-<Shot label="[print com dados de exemplo: Progresso, gráfico de peso bruto vs. tendência e gasto calórico estimado]" />
 
 </Section>
 
@@ -69,7 +71,10 @@ Cada cálculo roda onde faz mais sentido. Peso de tendência, composição corpo
   </Card>
 </Cards>
 
-<Shot label="[print com dados de exemplo: Treino em andamento, com séries, alvo, sugestão da próxima carga e rest timer]" />
+<Shot
+  src={treino}
+  alt="Tela de Treino do Ritmo: exercícios do dia da rotação com séries, faixa de repetições e RIR, botão para começar e os últimos treinos registrados."
+/>
 
 </Section>
 
@@ -108,7 +113,10 @@ O app guarda dados de saúde, então a autenticação foi a primeira coisa a fic
 - **Deploy no Coolify** com `docker-compose.prod.yml`: MySQL dedicado, backup diário com retenção de 14 dias e procedimento de restore documentado.
 - **PWA instalável**, com service worker só para os assets estáticos. Os dados sempre vêm da rede.
 
-<Shot label="[print com dados de exemplo: Check-in semanal, passo 3, com a proposta de nova meta e o motivo]" />
+<Shot
+  src={checkin}
+  alt="Passo 3 do check-in semanal com dados de exemplo: meta atual, nova meta proposta, a conta que explica o ajuste e os macros resultantes."
+/>
 
 </Section>
 

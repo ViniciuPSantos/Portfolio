@@ -1,0 +1,31 @@
+---
+interface Props {
+  items: string[];
+}
+
+const { items } = Astro.props;
+---
+
+<ul class="tags" role="list">
+  {items.map((t) => <li>{t}</li>)}
+</ul>
+
+<style>
+  .tags {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  li {
+    padding: 6px 10px;
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius-sm);
+  }
+</style>

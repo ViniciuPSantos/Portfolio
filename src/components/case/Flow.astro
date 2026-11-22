@@ -1,0 +1,83 @@
+---
+/** Diagrama em caixas ligadas por setas (arquitetura, fluxo de deploy). */
+interface Step {
+  label: string;
+  note?: string;
+  highlight?: boolean;
+}
+
+interface Props {
+  label: string;
+  steps: Step[];
+}
+
+const { label, steps } = Astro.props;
+---
+
+<figure class="flow">
+  <figcaption class="sr-only">{label}</figcaption>
+  <ol role="list">
+    {
+      steps.map((s, i) => (
+        <li>
+          {i > 0 && (
+            <span class="arrow" aria-hidden="true">
+              →
+            </span>
+          )}
+          <span class:list={['box', { hl: s.highlight }]}>
+            {s.label}
+            {s.note && <span class="note">{s.note}</span>}
+          </span>
+        </li>
+      ))
+    }
+  </ol>
+</figure>
+
+<style>
+  .flow {
+    margin: 0;
+  }
+
+  ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .arrow {
+    color: var(--text-dim);
+  }
+
+  .box {
+    padding: 14px 16px;
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+    background: var(--surface);
+    display: flex;
+    flex-direction: column;
+    line-height: 1.4;
+  }
+
+  .box.hl {
+    border-color: var(--accent);
+  }
+
+  .note {
+    color: var(--text-dim);
+    font-size: 11px;
+  }
+</style>

@@ -20,7 +20,7 @@ const links = (['projects', 'experience', 'stack', 'contact'] as const).map((key
   <nav class="bar" aria-label={d.a11y.mainNav}>
     {
       page.kind === 'project' ? (
-        <a class="brand" href={routes.section(lang, 'projects')}>
+        <a class="brand crumb" href={routes.section(lang, 'projects')}>
           ~/viniciusps<span class="dim">/{d.nav.projectsPath}/</span>
           <span class="accent">{page.slug}</span>
         </a>
@@ -117,8 +117,8 @@ const links = (['projects', 'experience', 'stack', 'contact'] as const).map((key
     color: var(--text-dim);
   }
 
-  .brand .dim + .accent {
-    margin-left: -6px;
+  .crumb {
+    gap: 0;
   }
 
   .cursor {

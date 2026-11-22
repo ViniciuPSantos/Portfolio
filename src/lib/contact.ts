@@ -1,12 +1,8 @@
 import { z } from 'astro/zod';
 
-export const SUBJECTS = ['vaga', 'freela', 'outro'] as const;
-export type Subject = (typeof SUBJECTS)[number];
-
 export const contactSchema = z.object({
   nome: z.string().trim().min(2).max(100),
   email: z.string().trim().max(254).pipe(z.email()),
-  assunto: z.enum(SUBJECTS),
   mensagem: z.string().trim().min(10).max(5000),
 });
 
@@ -29,27 +25,14 @@ function singleLine(value: string): string {
   return value.replace(/[\r\n\t\u0000-\u001f\u007f]+/g, ' ').trim();
 }
 
-const SUBJECT_LABEL: Record<Subject, string> = {
-  vaga: 'Vaga',
-  freela: 'Freela',
-  outro: 'Outro',
-};
-
 export function buildEmail(input: ContactInput): { subject: string; html: string; text: string } {
   const name = singleLine(input.nome);
-  const subject = `[viniciusps.tech] ${SUBJECT_LABEL[input.assunto]} · ${name}`.slice(0, 200);
-  const text = [
-    `Nome: ${name}`,
-    `E-mail: ${input.email}`,
-    `Assunto: ${SUBJECT_LABEL[input.assunto]}`,
-    '',
-    input.mensagem,
-  ].join('\n');
+  const subject = `Nova mensagem pelo portfólio — ${name}`.slice(0, 200);
+  const text = [`Nome: ${name}`, `E-mail: ${input.email}`, '', input.mensagem].join('\n');
   const html = `<!doctype html>
 <html lang="pt-BR"><body style="font-family:system-ui,sans-serif;line-height:1.5;color:#111">
 <p><strong>Nome:</strong> ${escapeHtml(name)}<br>
-<strong>E-mail:</strong> ${escapeHtml(input.email)}<br>
-<strong>Assunto:</strong> ${escapeHtml(SUBJECT_LABEL[input.assunto])}</p>
+<strong>E-mail:</strong> ${escapeHtml(input.email)}</p>
 <p style="white-space:pre-wrap">${escapeHtml(input.mensagem)}</p>
 </body></html>`;
   return { subject, html, text };
@@ -65,12 +48,15 @@ export function buildEmail(input: ContactInput): { subject: string; html: string
  */
 export class RateLimiter {
   private hits = new Map<string, number[]>();
+  private readonly max: number;
+  private readonly windowMs: number;
+  private readonly now: () => number;
 
-  constructor(
-    private readonly max: number,
-    private readonly windowMs: number,
-    private readonly now: () => number = Date.now,
-  ) {}
+  constructor(max: number, windowMs: number, now: () => number = Date.now) {
+    this.max = max;
+    this.windowMs = windowMs;
+    this.now = now;
+  }
 
   /** Registra uma tentativa. Retorna os segundos de espera se bloqueado, ou 0. */
   hit(key: string): number {

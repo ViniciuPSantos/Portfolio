@@ -37,7 +37,6 @@ export const en: Dict = {
     tagline:
       'Backend developer. I build APIs in Java/Spring Boot and C#/.NET, from the first line of code to production.',
     facts: ['São Paulo, Brazil', 'Backend @ XP Inc.', 'Systems Analysis @ São Judas'],
-    available: 'open to freelance work and new roles',
     ctaProjects: 'See projects',
     ctaCv: 'Download CV',
     ctaCvAlt: 'Portuguese version',
@@ -110,7 +109,7 @@ export const en: Dict = {
   contact: {
     prompt: './contact.sh',
     title: "Let's talk",
-    text: 'A job opening, a freelance project or just a chat about backend. I reply within [TIMEFRAME].',
+    text: 'Projects, collaborations or a chat about backend.',
     labels: { email: 'email', github: 'github', linkedin: 'linkedin', cv: 'cv' },
     cvLinks: 'download',
     cvPt: 'CV in Portuguese',
@@ -120,10 +119,8 @@ export const en: Dict = {
       namePh: 'Your name',
       email: 'email',
       emailPh: 'you@company.com',
-      subject: 'subject',
-      subjects: { vaga: 'job', freela: 'freelance', outro: 'other' },
       message: 'message',
-      messagePh: 'Tell me a bit about the role or the project',
+      messagePh: 'Tell me a bit about what you have in mind',
       honeypot: 'Leave this field empty',
       submit: 'Send message',
       sending: 'Sending…',

@@ -35,7 +35,6 @@ export const pt = {
     tagline:
       'Desenvolvedor backend. Construo APIs em Java/Spring Boot e C#/.NET, do código ao deploy em produção.',
     facts: ['São Paulo, BR', 'Backend @ XP Inc.', 'ADS @ São Judas'],
-    available: 'aberto a freelas e oportunidades',
     ctaProjects: 'Ver projetos',
     ctaCv: 'Baixar CV',
     ctaCvAlt: 'versão em inglês',
@@ -108,7 +107,7 @@ export const pt = {
   contact: {
     prompt: './contato.sh',
     title: 'Vamos conversar',
-    text: 'Vaga, projeto freelance ou uma conversa sobre backend. Respondo em até [PRAZO].',
+    text: 'Projetos, colaborações ou uma conversa sobre backend.',
     labels: { email: 'email', github: 'github', linkedin: 'linkedin', cv: 'cv' },
     cvLinks: 'baixar',
     cvPt: 'CV em português',
@@ -118,10 +117,8 @@ export const pt = {
       namePh: 'Seu nome',
       email: 'email',
       emailPh: 'voce@empresa.com',
-      subject: 'assunto',
-      subjects: { vaga: 'vaga', freela: 'freela', outro: 'outro' },
       message: 'mensagem',
-      messagePh: 'Conte um pouco sobre a vaga ou o projeto',
+      messagePh: 'Conte um pouco sobre o que você tem em mente',
       honeypot: 'Não preencha este campo',
       submit: 'Enviar mensagem',
       sending: 'Enviando…',

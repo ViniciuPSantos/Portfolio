@@ -19,7 +19,6 @@ const alt = otherLang(lang);
     <ul class="facts" role="list">
       {d.hero.facts.map((f) => <li>{f}</li>)}
     </ul>
-    <p class="available"><span class="dot dot-lg" aria-hidden="true"></span>{d.hero.available}</p>
     <div class="ctas">
       <a class="btn btn-primary" href={`#${d.ids.projects}`}>{d.hero.ctaProjects}</a>
       <a class="btn btn-outline" href={routes.cv(lang)} download>
@@ -123,20 +122,6 @@ const alt = otherLang(lang);
     padding: 6px 10px;
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
-  }
-
-  .available {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-family: var(--font-mono);
-    font-size: 13px;
-    color: var(--text-muted);
-  }
-
-  .dot-lg {
-    width: 8px;
-    height: 8px;
   }
 
   .ctas {

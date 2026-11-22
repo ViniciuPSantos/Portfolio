@@ -10,7 +10,6 @@ interface Props {
 const { lang } = Astro.props;
 const d = t(lang);
 const f = d.contact.form;
-const subjects = ['vaga', 'freela', 'outro'] as const;
 const emailIsSet = !isPlaceholder(site.email);
 ---
 
@@ -74,20 +73,6 @@ const emailIsSet = !isPlaceholder(site.email);
       <label for="f-email">{f.email}</label>
       <input id="f-email" name="email" type="email" autocomplete="email" placeholder={f.emailPh} required maxlength="254" />
     </div>
-
-    <fieldset class="field subjects">
-      <legend>{f.subject}</legend>
-      <div class="options">
-        {
-          subjects.map((s, i) => (
-            <label class="option">
-              <input type="radio" name="assunto" value={s} checked={i === 0} required />
-              <span>{f.subjects[s]}</span>
-            </label>
-          ))
-        }
-      </div>
-    </fieldset>
 
     <div class="field">
       <label for="f-msg">{f.message}</label>
@@ -253,8 +238,7 @@ const emailIsSet = !isPlaceholder(site.email);
     gap: 8px;
   }
 
-  label,
-  legend {
+  label {
     font-family: var(--font-mono);
     font-size: 13px;
     color: var(--text-muted);
@@ -289,63 +273,6 @@ const emailIsSet = !isPlaceholder(site.email);
     outline: 2px solid var(--accent-text);
     outline-offset: 0;
     border-color: transparent;
-  }
-
-  .subjects {
-    margin: 0;
-    padding: 0;
-    border: none;
-  }
-
-  legend {
-    padding: 0;
-    margin-bottom: 8px;
-  }
-
-  .options {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .option {
-    position: relative;
-    display: flex;
-  }
-
-  .option input {
-    position: absolute;
-    inset: 0;
-    margin: 0;
-    opacity: 0;
-    cursor: pointer;
-  }
-
-  .option span {
-    min-height: 44px;
-    padding: 0 16px;
-    display: flex;
-    align-items: center;
-    border: 1px solid var(--border-strong);
-    border-radius: var(--radius-sm);
-    color: var(--text-muted);
-    font-family: var(--font-mono);
-    font-size: 13px;
-  }
-
-  .option input:hover + span {
-    color: var(--text);
-  }
-
-  .option input:checked + span {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: var(--on-accent);
-  }
-
-  .option input:focus-visible + span {
-    outline: 2px solid var(--accent-text);
-    outline-offset: 2px;
   }
 
   .hp {

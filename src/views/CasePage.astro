@@ -90,7 +90,20 @@ const title = `${p.title} · Case study · Vinicius Santos`;
       <Content components={{ Section, Flow, Tags, Cards, Card, Shell, Shot }} />
     </div>
 
-    {p.credit && <p class="credit">{d.caseStudy.credit}: {p.credit}</p>}
+    {
+      p.credit && (
+        <p class="credit">
+          {d.caseStudy.credit}:{' '}
+          {p.creditUrl ? (
+            <a href={p.creditUrl} target="_blank" rel="noopener">
+              {p.credit} ↗<span class="sr-only"> {d.a11y.newTab}</span>
+            </a>
+          ) : (
+            p.credit
+          )}
+        </p>
+      )
+    }
 
     <nav class="pager" aria-label={d.a11y.projectNav}>
       <a class="all" href={routes.section(lang, 'projects')}>{d.caseStudy.allProjects}</a>
@@ -276,6 +289,15 @@ const title = `${p.title} · Case study · Vinicius Santos`;
     margin-top: 48px;
     font-size: 14px;
     color: var(--text-dim);
+  }
+
+  .credit a {
+    color: var(--text-muted);
+    text-underline-offset: 3px;
+  }
+
+  .credit a:hover {
+    color: var(--text);
   }
 
   .pager {

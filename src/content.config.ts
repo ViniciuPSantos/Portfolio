@@ -47,6 +47,7 @@ const projects = defineCollection({
           })
           .optional(),
         credit: z.string().optional(),
+        creditUrl: z.url().optional(),
       })
       .refine((p) => !p.hasCase || p.meta, { message: 'Projetos com hasCase: true precisam de `meta`.' })
       .refine((p) => !p.cover || p.coverAlt, { message: '`cover` precisa de `coverAlt`.' }),

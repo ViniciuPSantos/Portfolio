@@ -75,7 +75,7 @@ export const pt = {
         ],
       },
       {
-        period: '[INÍCIO] — jun 2028',
+        period: 'até jun 2028',
         org: 'Universidade São Judas Tadeu',
         role: 'Análise e Desenvolvimento de Sistemas',
         text: 'Com base anterior em Ciência da Computação.',

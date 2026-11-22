@@ -39,7 +39,6 @@ export const en: Dict = {
     facts: ['São Paulo, Brazil', 'Backend @ XP Inc.', 'Systems Analysis @ São Judas'],
     ctaProjects: 'See projects',
     ctaCv: 'Download CV',
-    ctaCvAlt: 'Portuguese version',
     ctaContact: 'Get in touch →',
     window: 'zsh — viniciusps',
     lines: [
@@ -127,7 +126,7 @@ export const en: Dict = {
       success: "Message sent. Thanks! I'll get back to you soon.",
       errorInvalid: 'Please check the fields: name (2+ characters), a valid email and a message (10+ characters).',
       errorRate: 'Too many messages in a short time. Please try again later.',
-      errorGeneric: "Couldn't send it right now. Try again or send me an email.",
+      errorGeneric: "Couldn't send it right now. Try again later or reach me on LinkedIn.",
     },
     page: {
       title: 'Contact · viniciusps.tech',
@@ -174,7 +173,7 @@ export const en: Dict = {
       '  open <project>   open the case study',
       '  cat stack        technologies I use',
       '  contact          how to reach me',
-      '  cv [pt|en]       download my resume',
+      '  cv               download my resume (PDF)',
       '  lang pt|en       switch language',
       '  clear            clear the screen',
     ],
@@ -192,6 +191,7 @@ export const en: Dict = {
     stackCommand: 'cat stack',
     contactCommand: 'contact',
     cvDownloading: 'downloading {file} ...',
+    cvUnavailable: 'resume in {lang} is not available yet. Available: {list}.',
     opening: 'opening {name} ...',
     noCase: "{name} doesn't have a case study yet. Opening the project link ...",
     openUsage: 'usage: open <project>. Projects: {list}',

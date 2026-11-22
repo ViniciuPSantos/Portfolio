@@ -37,7 +37,6 @@ export const pt = {
     facts: ['São Paulo, BR', 'Backend @ XP Inc.', 'ADS @ São Judas'],
     ctaProjects: 'Ver projetos',
     ctaCv: 'Baixar CV',
-    ctaCvAlt: 'versão em inglês',
     ctaContact: 'Falar comigo →',
     window: 'zsh — viniciusps',
     lines: [
@@ -125,7 +124,7 @@ export const pt = {
       success: 'Mensagem enviada. Obrigado! Respondo em breve.',
       errorInvalid: 'Confira os campos: nome (2+ caracteres), e-mail válido e mensagem (10+ caracteres).',
       errorRate: 'Muitas mensagens em pouco tempo. Tente de novo mais tarde.',
-      errorGeneric: 'Não foi possível enviar agora. Tente de novo ou mande um e-mail.',
+      errorGeneric: 'Não foi possível enviar agora. Tente de novo mais tarde ou fale comigo pelo LinkedIn.',
     },
     page: {
       title: 'Contato · viniciusps.tech',
@@ -175,7 +174,7 @@ export const pt = {
       '  open <projeto>   abre o case study',
       '  cat stack        tecnologias que uso',
       '  contato          como falar comigo',
-      '  cv [pt|en]       baixar currículo',
+      '  cv               baixar currículo (PDF)',
       '  lang pt|en       trocar idioma',
       '  clear            limpa a tela',
     ],
@@ -193,6 +192,7 @@ export const pt = {
     stackCommand: 'cat stack',
     contactCommand: 'contato',
     cvDownloading: 'baixando {file} ...',
+    cvUnavailable: 'currículo em {lang} ainda não disponível. Disponível: {list}.',
     opening: 'abrindo {name} ...',
     noCase: '{name} ainda não tem case study. Abrindo o link do projeto ...',
     openUsage: 'uso: open <projeto>. Projetos: {list}',

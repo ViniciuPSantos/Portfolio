@@ -31,7 +31,6 @@ export const routes = {
   home: (lang: Lang) => (lang === 'pt' ? '/' : '/en/'),
   project: (lang: Lang, slug: string) => (lang === 'pt' ? `/projetos/${slug}/` : `/en/projects/${slug}/`),
   section: (lang: Lang, key: keyof Dict['ids']) => `${routes.home(lang)}#${t(lang).ids[key]}`,
-  cv: (lang: Lang) => `/cv/vinicius-santos-${lang}.pdf`,
   contactApi: '/api/contact',
   githubApi: '/api/github',
 };

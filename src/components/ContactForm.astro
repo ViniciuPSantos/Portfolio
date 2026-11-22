@@ -1,6 +1,6 @@
 ---
 import Prompt from './Prompt.astro';
-import { isPlaceholder, site } from '../data/site';
+import { availableCvs, site } from '../data/site';
 import { routes, t, type Lang } from '../i18n/utils';
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
 const { lang } = Astro.props;
 const d = t(lang);
 const f = d.contact.form;
-const emailIsSet = !isPlaceholder(site.email);
+const cvs = availableCvs();
 ---
 
 <section id={d.ids.contact} class="section contact" aria-labelledby="contato-title">
@@ -19,10 +19,16 @@ const emailIsSet = !isPlaceholder(site.email);
     <h2 id="contato-title" class="section-title">{d.contact.title}</h2>
     <p class="lead">{d.contact.text}</p>
     <dl class="channels">
-      <div class="row">
-        <dt>{d.contact.labels.email}</dt>
-        <dd>{emailIsSet ? <a href={`mailto:${site.email}`}>{site.email}</a> : <span>{site.email}</span>}</dd>
-      </div>
+      {
+        site.email && (
+          <div class="row">
+            <dt>{d.contact.labels.email}</dt>
+            <dd>
+              <a href={`mailto:${site.email}`}>{site.email}</a>
+            </dd>
+          </div>
+        )
+      }
       <div class="row">
         <dt>{d.contact.labels.github}</dt>
         <dd>
@@ -39,15 +45,29 @@ const emailIsSet = !isPlaceholder(site.email);
           </a>
         </dd>
       </div>
-      <div class="row" id="cv">
-        <dt>{d.contact.labels.cv}</dt>
-        <dd class="cv">
-          <span aria-hidden="true">{d.contact.cvLinks}</span>
-          <a href={routes.cv('pt')} download hreflang="pt-BR" aria-label={`${d.contact.cvPt} (PDF)`}>PT</a>
-          <span aria-hidden="true">·</span>
-          <a href={routes.cv('en')} download hreflang="en" aria-label={`${d.contact.cvEn} (PDF)`}>EN</a>
-        </dd>
-      </div>
+      {
+        cvs.length > 0 && (
+          <div class="row" id="cv">
+            <dt>{d.contact.labels.cv}</dt>
+            <dd class="cv">
+              <span aria-hidden="true">{d.contact.cvLinks}</span>
+              {cvs.map((c, i) => (
+                <>
+                  {i > 0 && <span aria-hidden="true">·</span>}
+                  <a
+                    href={c.url}
+                    download
+                    hreflang={c.lang === 'pt' ? 'pt-BR' : 'en'}
+                    aria-label={`${c.lang === 'pt' ? d.contact.cvPt : d.contact.cvEn} (PDF)`}
+                  >
+                    {c.lang.toUpperCase()}
+                  </a>
+                </>
+              ))}
+            </dd>
+          </div>
+        )
+      }
     </dl>
   </div>
 

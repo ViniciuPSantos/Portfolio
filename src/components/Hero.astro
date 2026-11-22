@@ -1,6 +1,7 @@
 ---
 import Prompt from './Prompt.astro';
-import { routes, t, otherLang, type Lang } from '../i18n/utils';
+import { availableCvs, cvFor } from '../data/site';
+import { t, type Lang } from '../i18n/utils';
 
 interface Props {
   lang: Lang;
@@ -8,7 +9,10 @@ interface Props {
 
 const { lang } = Astro.props;
 const d = t(lang);
-const alt = otherLang(lang);
+// CV principal: o do idioma da página, ou o que existir. O secundário só aparece se houver outro idioma.
+const cv = cvFor(lang);
+const altCv = availableCvs().find((c) => c.lang !== cv?.lang);
+const hreflang = (l: Lang) => (l === 'pt' ? 'pt-BR' : 'en');
 ---
 
 <section class="hero" aria-labelledby="hero-title">
@@ -21,18 +25,28 @@ const alt = otherLang(lang);
     </ul>
     <div class="ctas">
       <a class="btn btn-primary" href={`#${d.ids.projects}`}>{d.hero.ctaProjects}</a>
-      <a class="btn btn-outline" href={routes.cv(lang)} download>
-        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-          <polyline points="7 10 12 15 17 10"></polyline>
-          <line x1="12" y1="15" x2="12" y2="3"></line>
-        </svg>
-        {d.hero.ctaCv}
-        <span class="sr-only">(PDF, {lang.toUpperCase()})</span>
-      </a>
-      <a class="cv-alt" href={routes.cv(alt)} download hreflang={alt === 'pt' ? 'pt-BR' : 'en'}>
-        {alt.toUpperCase()}<span class="sr-only"> — {d.hero.ctaCvAlt} (PDF)</span>
-      </a>
+      {
+        cv && (
+          <a class="btn btn-outline" href={cv.url} download hreflang={hreflang(cv.lang)}>
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            {d.hero.ctaCv}
+            {cv.lang !== lang ? <span class="cv-lang">({cv.lang.toUpperCase()})</span> : null}
+            <span class="sr-only">(PDF)</span>
+          </a>
+        )
+      }
+      {
+        altCv && (
+          <a class="cv-alt" href={altCv.url} download hreflang={hreflang(altCv.lang)}>
+            {altCv.lang.toUpperCase()}
+            <span class="sr-only"> — {altCv.lang === 'pt' ? d.contact.cvPt : d.contact.cvEn} (PDF)</span>
+          </a>
+        )
+      }
       <a class="talk" href={`#${d.ids.contact}`}>{d.hero.ctaContact}</a>
     </div>
   </div>
@@ -130,6 +144,12 @@ const alt = otherLang(lang);
     align-items: center;
     gap: 12px;
     padding-top: 8px;
+  }
+
+  .cv-lang {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
   }
 
   .cv-alt {

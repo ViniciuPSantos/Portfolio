@@ -1,5 +1,5 @@
 ---
-import { site } from '../data/site';
+import { cvFor, site } from '../data/site';
 import { getProjects } from '../lib/projects';
 import { otherLang, pathFor, routes, t, type Lang, type PageRef } from '../i18n/utils';
 
@@ -16,9 +16,10 @@ const data = {
   lang,
   t: d.terminal,
   langPaths: { pt: pathFor('pt', page), en: pathFor('en', page) },
-  cv: { pt: routes.cv('pt'), en: routes.cv('en') },
+  cv: site.cv,
+  cvDefault: cvFor(lang)?.lang ?? null,
   contact: [
-    `email      ${site.email}`,
+    ...(site.email ? [`email      ${site.email}`] : []),
     `github     ${site.github.url.replace('https://', '')}`,
     `linkedin   ${site.linkedin.url.replace('https://www.', '')}`,
   ],
@@ -79,7 +80,7 @@ const other = otherLang(lang);
           </button>
         ))
       }
-      <button type="button" data-terminal-run={`cv ${lang}`}>cv {lang}</button>
+      {data.cvDefault && <button type="button" data-terminal-run="cv">cv</button>}
       <button type="button" data-terminal-run={`lang ${other}`}>lang {other}</button>
     </div>
   </div>
@@ -93,7 +94,8 @@ const other = otherLang(lang);
     lang: 'pt' | 'en';
     t: Record<string, string | string[]>;
     langPaths: Record<'pt' | 'en', string>;
-    cv: Record<'pt' | 'en', string>;
+    cv: Record<'pt' | 'en', string | null>;
+    cvDefault: 'pt' | 'en' | null;
     contact: string[];
     projects: { slug: string; title: string; url: string | null; hasCase: boolean }[];
   };
@@ -128,8 +130,8 @@ const other = otherLang(lang);
       'cat stack',
       'contato',
       'contact',
-      'cv pt',
-      'cv en',
+      'cv',
+      ...(['pt', 'en'] as const).filter((l) => data.cv[l]).map((l) => `cv ${l}`),
       'lang pt',
       'lang en',
       'clear',
@@ -195,9 +197,11 @@ const other = otherLang(lang);
       if (lower === 'cat stack' || lower === 'stack') return out(...list('stack'));
       if (lower === 'contato' || lower === 'contact') return out(...data.contact);
       if (name === 'cv') {
-        const l = arg === 'pt' || arg === 'en' ? arg : arg === '' ? data.lang : null;
-        if (!l) return err(fill(s('notFound'), { cmd }));
-        const url = data.cv[l];
+        const l = arg === 'pt' || arg === 'en' ? arg : arg === '' ? data.cvDefault : null;
+        const available = (['pt', 'en'] as const).filter((x) => data.cv[x]).join(', ');
+        if (arg && arg !== 'pt' && arg !== 'en') return err(fill(s('notFound'), { cmd }));
+        const url = l ? data.cv[l] : null;
+        if (!url) return err(fill(s('cvUnavailable'), { lang: arg || data.lang, list: available || '—' }));
         download(url);
         return out(fill(s('cvDownloading'), { file: url.split('/').pop() ?? '' }));
       }

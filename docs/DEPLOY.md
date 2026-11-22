@@ -87,7 +87,7 @@ Já está resolvido no repositório: o `vercel.json` da raiz tem um redirect per
 - [ ] `/en/` e os cases em PT e EN abrem; o toggle leva à mesma página no outro idioma.
 - [ ] `/api/github` responde com `Cache-Control: public, s-maxage=3600, stale-while-revalidate=86400`.
 - [ ] Formulário: mensagem chega; o honeypot e o rate limit não bloqueiam uso normal.
-- [ ] `/cv/vinicius-santos-pt.pdf` e `/cv/vinicius-santos-en.pdf` baixam.
+- [ ] `/cv/vinicius-santos-en.pdf` baixa (e o PT, quando for adicionado em `site.cv`).
 - [ ] `/sitemap-index.xml` e `/robots.txt` acessíveis; envie o sitemap no Google Search Console.
 - [ ] Prévia de link (OG) no LinkedIn: use o [Post Inspector](https://www.linkedin.com/post-inspector/) com a URL nova.
 - [ ] Lighthouse (DevTools → Lighthouse, modo mobile) ≥ 95 nas quatro categorias em `/`, `/en/` e num case.

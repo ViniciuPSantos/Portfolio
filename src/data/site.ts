@@ -19,7 +19,7 @@ export const site: {
   name: 'Vinicius Santos',
   url: 'https://viniciusps.tech',
   domain: 'viniciusps.tech',
-  email: null,
+  email: 'vipaulasantos@gmail.com',
   github: {
     user: 'ViniciuPSantos',
     url: 'https://github.com/ViniciuPSantos',

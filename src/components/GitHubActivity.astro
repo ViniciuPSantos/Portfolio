@@ -73,6 +73,111 @@ const user = site.github.user;
   </div>
 </section>
 
+<script>
+  type Activity = {
+    repos: number;
+    contributions: number;
+    languages: { name: string; pct: number }[];
+    commits: { repo: string; message: string; hash: string; url: string; date: string }[];
+  };
+
+  // Tons de cinza + acento; o rótulo em texto ao lado garante que a cor não é a única informação.
+  const SHADES = ['var(--accent)', '#6b6b6b', '#4d4d4d', '#3a3a3a', '#2b2b2b'];
+
+  const section = document.querySelector<HTMLElement>('[data-github]');
+
+  if (section) {
+    const locale = section.dataset.lang === 'en' ? 'en' : 'pt-BR';
+    const $ = (name: string) => section.querySelector<HTMLElement>(`[data-gh="${name}"]`)!;
+    const body = section.querySelector<HTMLElement>('.body')!;
+    const number = new Intl.NumberFormat(locale);
+    const percent = new Intl.NumberFormat(locale, { maximumFractionDigits: 1 });
+    const relative = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' });
+
+    const ago = (iso: string) => {
+      const seconds = (Date.parse(iso) - Date.now()) / 1000;
+      const units: [Intl.RelativeTimeFormatUnit, number][] = [
+        ['year', 31536000],
+        ['month', 2592000],
+        ['week', 604800],
+        ['day', 86400],
+        ['hour', 3600],
+        ['minute', 60],
+      ];
+      for (const [unit, size] of units) {
+        if (Math.abs(seconds) >= size) return relative.format(Math.round(seconds / size), unit);
+      }
+      return relative.format(0, 'minute');
+    };
+
+    const render = (data: Activity) => {
+      $('repos').textContent = number.format(data.repos);
+      $('contributions').textContent = number.format(data.contributions);
+      section.querySelectorAll('.skel').forEach((el) => el.classList.remove('skel', 'skel-num'));
+
+      const bar = $('lang-bar');
+      const list = $('lang-list');
+      bar.replaceChildren();
+      list.replaceChildren();
+      data.languages.forEach((l, i) => {
+        const color = SHADES[i] ?? '#2b2b2b';
+        const seg = document.createElement('span');
+        seg.className = 'seg';
+        seg.style.flex = String(Math.max(l.pct, 1));
+        seg.style.background = color;
+        bar.append(seg);
+
+        const li = document.createElement('li');
+        const swatch = document.createElement('span');
+        swatch.className = 'swatch';
+        swatch.style.background = color;
+        swatch.setAttribute('aria-hidden', 'true');
+        li.append(swatch, `${l.name} ${percent.format(l.pct)}%`);
+        list.append(li);
+      });
+
+      const commits = $('commits');
+      commits.replaceChildren();
+      for (const c of data.commits) {
+        const li = document.createElement('li');
+        li.className = 'commit';
+        const hash = document.createElement('a');
+        hash.className = 'hash';
+        hash.href = c.url;
+        hash.target = '_blank';
+        hash.rel = 'noopener';
+        hash.textContent = c.hash;
+        const msg = document.createElement('span');
+        msg.className = 'msg';
+        const repo = document.createElement('span');
+        repo.className = 'repo';
+        repo.textContent = c.repo;
+        msg.append(repo, ` · ${c.message}`);
+        const time = document.createElement('time');
+        time.dateTime = c.date;
+        time.textContent = ago(c.date);
+        li.append(hash, msg, time);
+        commits.append(li);
+      }
+      if (!data.commits.length) commits.closest('.log')?.remove();
+    };
+
+    section.dataset.state = 'loading';
+    fetch(section.dataset.endpoint ?? '/api/github', { headers: { Accept: 'application/json' } })
+      .then((res) => (res.ok ? (res.json() as Promise<Activity>) : Promise.reject(new Error(String(res.status)))))
+      .then((data) => {
+        render(data);
+        section.dataset.state = 'ready';
+        body.setAttribute('aria-busy', 'false');
+        $('status').textContent = '';
+      })
+      .catch(() => {
+        // Falhou: esconde os dados e fica só o link do perfil, sem erro visível.
+        section.dataset.state = 'error';
+      });
+  }
+</script>
+
 <style>
   .top {
     display: flex;

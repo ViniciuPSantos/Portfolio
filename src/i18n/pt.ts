@@ -42,8 +42,8 @@ export const pt = {
     lines: [
       { cmd: 'cat sobre.txt', out: ['backend developer · são paulo'] },
       { cmd: 'cat stack.txt', out: ['java · spring boot · c# · .net · python'] },
-      { cmd: 'cat agora.txt', out: ['apis de renda variável @ xp inc.', 'ads @ são judas (até 2028)'] },
     ],
+    photoAlt: 'Foto de Vinicius Santos',
   },
   projects: {
     prompt: 'ls projetos/ --destaque',

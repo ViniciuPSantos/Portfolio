@@ -44,8 +44,8 @@ export const en: Dict = {
     lines: [
       { cmd: 'cat about.txt', out: ['backend developer · são paulo'] },
       { cmd: 'cat stack.txt', out: ['java · spring boot · c# · .net · python'] },
-      { cmd: 'cat now.txt', out: ['equities apis @ xp inc.', 'systems analysis @ são judas (until 2028)'] },
     ],
+    photoAlt: 'Photo of Vinicius Santos',
   },
   projects: {
     prompt: 'ls projects/ --featured',

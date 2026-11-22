@@ -1,5 +1,7 @@
 ---
+import { Image } from 'astro:assets';
 import Prompt from './Prompt.astro';
+import foto from '../assets/foto.jpg';
 import { availableCvs, cvFor } from '../data/site';
 import { t, type Lang } from '../i18n/utils';
 
@@ -51,12 +53,17 @@ const hreflang = (l: Lang) => (l === 'pt' ? 'pt-BR' : 'en');
     </div>
   </div>
 
-  <div class="window" aria-hidden="true">
-    <div class="titlebar">
+  <!-- Janela decorativa: só a foto é exposta a leitores de tela. -->
+  <div class="window">
+    <div class="titlebar" aria-hidden="true">
       <span class="light"></span><span class="light"></span><span class="light"></span>
       <span class="wtitle">{d.hero.window}</span>
     </div>
     <div class="screen">
+      <div aria-hidden="true"><span class="accent">$</span> open foto.jpg</div>
+      <Image class="photo" src={foto} alt={d.hero.photoAlt} width={168} height={168} densities={[1, 2]} loading="eager" />
+      <div class="gap" aria-hidden="true"></div>
+      <div aria-hidden="true">
       {
         d.hero.lines.map((l) => (
           <>
@@ -71,6 +78,7 @@ const hreflang = (l: Lang) => (l === 'pt' ? 'pt-BR' : 'en');
         ))
       }
       <div><span class="accent">$</span> <span class="caret"></span></div>
+      </div>
     </div>
   </div>
 </section>
@@ -223,6 +231,15 @@ const hreflang = (l: Lang) => (l === 'pt' ? 'pt-BR' : 'en');
 
   .gap {
     height: 12px;
+  }
+
+  .photo {
+    width: 168px;
+    height: 168px;
+    margin-top: 8px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--border-strong);
   }
 
   .caret {
